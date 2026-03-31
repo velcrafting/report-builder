@@ -1,0 +1,275 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  viewer
+  editor
+  approver
+  admin
+}
+
+enum Cadence {
+  weekly
+  monthly
+  quarterly
+  custom
+}
+
+enum ImportKind {
+  primary
+  supplemental
+}
+
+enum ImportStatus {
+  uploaded
+  mapped
+  normalized
+  archived
+}
+
+enum FieldType {
+  number
+  percent
+  currency
+  text
+  date
+  status
+  tag
+  link
+  boolean
+}
+
+enum FieldRole {
+  kpi
+  evidence
+  takeaway
+  highlightFlag
+  classification
+  dimension
+  metric
+  note
+  ignored
+}
+
+enum DraftState {
+  draft
+  in_review
+}
+
+enum WidgetSize {
+  small
+  medium
+  large
+}
+
+enum InsightClassification {
+  highlight
+  risk
+  blocker
+  action
+  none
+}
+
+enum InsightPriority {
+  low
+  medium
+  high
+}
+
+enum OutputState {
+  draft
+  in_review
+  approved
+  superseded
+}
+
+model User {
+  id             String             @id @default(cuid())
+  email          String             @unique
+  name           String?
+  role           UserRole           @default(viewer)
+  isWhitelisted  Boolean            @default(false)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  importBatches  ImportBatch[]
+  reportDrafts   ReportDraft[]
+  annotations    InsightAnnotation[]
+  approvedOutput OutputVersion[]    @relation("ApprovedOutputUser")
+  shareLinks     ShareLink[]
+  rollupsCreated RollupVersion[]    @relation("RollupCreator")
+  rollupsApproved RollupVersion[]   @relation("RollupApprover")
+}
+
+model Period {
+  id                 String            @id @default(cuid())
+  cadence            Cadence
+  startDate          DateTime
+  endDate            DateTime
+  label              String
+  comparisonPeriodId String?
+  createdAt          DateTime          @default(now())
+  comparisonPeriod   Period?           @relation("ComparisonPeriod", fields: [comparisonPeriodId], references: [id])
+  comparedToBy       Period[]          @relation("ComparisonPeriod")
+  importBatches      ImportBatch[]
+  normalizedRecords  NormalizedRecord[]
+  reportDrafts       ReportDraft[]
+  annotations        InsightAnnotation[]
+  outputVersions     OutputVersion[]
+  rollupVersions     RollupVersion[]
+}
+
+model ImportBatch {
+  id               String          @id @default(cuid())
+  section          String
+  periodId         String
+  kind             ImportKind
+  filename         String
+  uploadedByUserId String
+  status           ImportStatus    @default(uploaded)
+  uploadedAt       DateTime        @default(now())
+  notes            String?
+  period           Period          @relation(fields: [periodId], references: [id])
+  uploadedByUser   User            @relation(fields: [uploadedByUserId], references: [id])
+  rawRows          RawImportRow[]
+  normalizedRecords NormalizedRecord[]
+}
+
+model RawImportRow {
+  id            String      @id @default(cuid())
+  importBatchId String
+  rowIndex      Int
+  rawJson       String
+  createdAt     DateTime    @default(now())
+  importBatch   ImportBatch @relation(fields: [importBatchId], references: [id], onDelete: Cascade)
+}
+
+model FieldRegistryEntry {
+  id               String     @id @default(cuid())
+  section          String
+  sourceColumnName String
+  internalKey      String
+  displayLabel     String
+  fieldType        FieldType
+  fieldRole        FieldRole
+  widgetEligible   Boolean    @default(true)
+  editableInApp    Boolean    @default(false)
+  active           Boolean    @default(true)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+}
+
+model NormalizedRecord {
+  id            String      @id @default(cuid())
+  section       String
+  periodId      String
+  importBatchId String
+  sourceRowId   String
+  normalizedJson String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  period        Period      @relation(fields: [periodId], references: [id])
+  importBatch   ImportBatch @relation(fields: [importBatchId], references: [id])
+}
+
+model ReportDraft {
+  id              String          @id @default(cuid())
+  section         String
+  periodId        String
+  createdByUserId String
+  status          DraftState      @default(draft)
+  title           String
+  summary         String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  period          Period          @relation(fields: [periodId], references: [id])
+  createdByUser   User            @relation(fields: [createdByUserId], references: [id])
+  widgets         WidgetInstance[]
+  outputVersions  OutputVersion[]
+}
+
+model WidgetInstance {
+  id              String      @id @default(cuid())
+  reportDraftId   String
+  widgetType      String
+  zoneKey         String
+  size            WidgetSize
+  configJson      String
+  sortOrder       Int
+  includeInRollup Boolean     @default(false)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  reportDraft     ReportDraft @relation(fields: [reportDraftId], references: [id], onDelete: Cascade)
+}
+
+model InsightAnnotation {
+  id              String                @id @default(cuid())
+  section         String
+  periodId        String
+  relatedRecordId String?
+  relatedWidgetId String?
+  title           String
+  body            String
+  classification  InsightClassification @default(none)
+  priority        InsightPriority       @default(medium)
+  promotedToRollup Boolean              @default(false)
+  createdByUserId String
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  period          Period                @relation(fields: [periodId], references: [id])
+  createdByUser   User                  @relation(fields: [createdByUserId], references: [id])
+}
+
+model OutputVersion {
+  id                  String        @id @default(cuid())
+  section             String
+  periodId            String
+  versionNumber       Int
+  state               OutputState   @default(draft)
+  basedOnReportDraftId String
+  snapshotJson        String
+  approvedByUserId    String?
+  approvedAt          DateTime?
+  supersededByOutputId String?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  period              Period        @relation(fields: [periodId], references: [id])
+  basedOnReportDraft  ReportDraft   @relation(fields: [basedOnReportDraftId], references: [id])
+  approvedByUser      User?         @relation("ApprovedOutputUser", fields: [approvedByUserId], references: [id])
+  supersededBy        OutputVersion? @relation("OutputSupersession", fields: [supersededByOutputId], references: [id])
+  supersedes          OutputVersion[] @relation("OutputSupersession")
+  shareLinks          ShareLink[]
+}
+
+model ShareLink {
+  id              String        @id @default(cuid())
+  outputVersionId String
+  token           String        @unique
+  createdByUserId String
+  active          Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  expiresAt       DateTime?
+  outputVersion   OutputVersion @relation(fields: [outputVersionId], references: [id], onDelete: Cascade)
+  createdByUser   User          @relation(fields: [createdByUserId], references: [id])
+}
+
+model RollupVersion {
+  id               String       @id @default(cuid())
+  periodId         String
+  title            String
+  sourceOutputIdsJson String
+  snapshotJson     String
+  state            OutputState  @default(draft)
+  createdByUserId  String
+  approvedByUserId String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  period           Period       @relation(fields: [periodId], references: [id])
+  createdByUser    User         @relation("RollupCreator", fields: [createdByUserId], references: [id])
+  approvedByUser   User?        @relation("RollupApprover", fields: [approvedByUserId], references: [id])
+}

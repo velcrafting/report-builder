@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comex Thought Leadership — Amplification Strategy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" onerror="this.remove()">
+  <style>
+    :root {
+      --bg: #000000;
+      --surface: #0a0a0a;
+      --surface-2: #141414;
+      --surface-3: #1c1c1c;
+      --border: #222222;
+      --border-light: #333333;
+      --text: #f0f0f0;
+      --text-secondary: #999999;
+      --text-dim: #555555;
+      --green: #34d399;
+      --green-glow: rgba(52,211,153,0.12);
+      --amber: #fbbf24;
+      --amber-glow: rgba(251,191,36,0.12);
+      --red: #f87171;
+      --red-glow: rgba(248,113,113,0.12);
+      --accent: #ff5500;
+      --accent-glow: rgba(255,85,0,0.10);
+      --blue: #60a5fa;
+      --blue-glow: rgba(96,165,250,0.10);
+      --purple: #a78bfa;
+      --purple-glow: rgba(167,139,250,0.10);
+      --radius: 14px;
+      --radius-sm: 10px;
+      --radius-xs: 6px;
+      --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6;
+      min-height: 100vh; overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    ::selection { background: rgba(255,85,0,0.3); color: #fff; }
+
+    .bg-glow { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .bg-glow .orb { position: absolute; border-radius: 50%; filter: blur(140px); animation: float 25s ease-in-out infinite; }
+    .bg-glow .orb:nth-child(1) { width: 700px; height: 700px; background: #ff5500; top: -300px; left: -200px; opacity: 0.08; }
+    .bg-glow .orb:nth-child(2) { width: 500px; height: 500px; background: #ff8800; bottom: -250px; right: -150px; animation-delay: -8s; opacity: 0.05; }
+    .bg-glow .orb:nth-child(3) { width: 400px; height: 400px; background: #ffffff; top: 40%; left: 60%; animation-delay: -16s; opacity: 0.02; }
+    @keyframes float { 0%,100%{transform:translate(0,0) scale(1);} 33%{transform:translate(30px,-40px) scale(1.05);} 66%{transform:translate(-20px,30px) scale(0.95);} }
+
+    /* NAV */
+    .nav { position: sticky; top: 0; z-index: 100; background: rgba(0,0,0,0.82); backdrop-filter: blur(30px) saturate(1.4); -webkit-backdrop-filter: blur(30px) saturate(1.4); border-bottom: 1px solid var(--border); }
+    .nav-inner { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; gap: 1rem; height: 52px; padding: 0 2.5rem; }
+    .nav-brand { font-weight: 900; font-size: 0.95rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-dim); white-space: nowrap; }
+    .nav-divider { width: 1px; height: 20px; background: var(--border); }
+    .nav-tabs { display: flex; gap: 0.15rem; list-style: none; flex-wrap: wrap; }
+    .nav-tabs li { padding: 0.35rem 0.75rem; font-size: 0.78rem; font-weight: 600; color: var(--text-dim); cursor: pointer; border-radius: 999px; transition: var(--transition); user-select: none; white-space: nowrap; position: relative; letter-spacing: 0.01em; }
+    .nav-tabs li:hover { color: var(--text-secondary); background: rgba(255,255,255,0.04); }
+    .nav-tabs li.active { color: #fff; background: rgba(255,255,255,0.08); }
+    .nav-tabs li.active::after { content: ''; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); width: 16px; height: 2px; background: var(--accent); border-radius: 2px; }
+    .nav-confidential { margin-left: auto; font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-dim); border: 1px solid var(--border); padding: 0.2rem 0.6rem; border-radius: 999px; }
+
+    /* LAYOUT */
+    .container { max-width: 1400px; margin: 0 auto; padding: 1.25rem 2.5rem 3rem; position: relative; z-index: 1; }
+    .view { display: none; animation: fadeUp 0.3s ease; }
+    .view.active { display: block; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* HERO */
+    .hero { position: relative; padding: 1.5rem 2.5rem; margin-bottom: 1rem; border-radius: var(--radius); overflow: hidden; background: linear-gradient(135deg, #111111 0%, #0a0a0a 50%, #110d0a 100%); border: 1px solid var(--border); }
+    .hero::before { content: ""; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='g' width='60' height='60' patternUnits='userSpaceOnUse'%3E%3Cpath d='M60 0H0v60' fill='none' stroke='%23ffffff' stroke-opacity='0.02' stroke-width='0.5'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23g)'/%3E%3C/svg%3E"); pointer-events: none; }
+    .hero::after { content: ''; position: absolute; top: 0; right: 0; width: 400px; height: 100%; background: radial-gradient(ellipse at 100% 50%, rgba(255,85,0,0.06) 0%, transparent 70%); pointer-events: none; }
+    .hero-top { display: flex; align-items: center; gap: 0.5rem; position: relative; margin-bottom: 0.6rem; }
+    .hero-badge { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; padding: 0.22rem 0.65rem; border-radius: 999px; background: var(--accent); color: #fff; }
+    .hero-q { font-size: 0.6rem; font-weight: 700; color: var(--text-dim); padding: 0.2rem 0.5rem; border-radius: 999px; border: 1px solid var(--border); }
+    .hero h1 { font-size: 2rem; font-weight: 900; letter-spacing: -0.035em; line-height: 1.1; margin: 0; position: relative; color: #ffffff; }
+    .hero-sub { font-size: 0.92rem; color: var(--text-secondary); position: relative; margin-top: 0.4rem; line-height: 1.5; max-width: 700px; }
+    .hero-meta-bar { display: flex; align-items: center; gap: 1.5rem; position: relative; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border); }
+    .hero-meta-item { font-size: 0.72rem; color: var(--text-dim); }
+    .hero-meta-item span { color: var(--text-secondary); font-weight: 600; }
+
+    /* CARDS */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 0.75rem; overflow: hidden; transition: border-color 0.3s ease; }
+    .card-head { display: flex; align-items: center; padding: 0.85rem 1.5rem; border-bottom: 1px solid var(--border); gap: 0.75rem; }
+    .card-head-title { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); }
+
+    /* SECTION NUM */
+    .section-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 800; flex-shrink: 0; }
+    .section-num.orange { background: var(--accent); color: #fff; }
+
+    /* SECTION HEADER */
+    .section-title { font-size: 1.1rem; text-transform: none; color: var(--text); letter-spacing: -0.01em; font-weight: 800; }
+    .section-badge { margin-left: auto; font-size: 0.58rem; font-weight: 700; color: var(--text-dim); letter-spacing: 0.06em; text-transform: uppercase; }
+    .section-body { padding: 1.25rem 1.5rem 1.5rem; }
+    .section-intro { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.65; margin-bottom: 1.25rem; max-width: 800px; }
+    .section-intro strong { color: var(--text); }
+    .section-intro .hl { color: var(--accent); }
+    .label-sm { font-size: 0.62rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-dim); margin-bottom: 0.5rem; }
+
+    /* PILLAR GRID */
+    .pillar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+    .pillar-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.85rem 0.9rem; text-align: center; transition: var(--transition); }
+    .pillar-card:hover { border-color: var(--border-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+    .pillar-num { font-size: 1.3rem; font-weight: 900; line-height: 1; margin-bottom: 0.3rem; font-family: 'JetBrains Mono', monospace; }
+    .pillar-title { font-size: 0.82rem; font-weight: 800; color: var(--text); margin-bottom: 0.2rem; line-height: 1.25; }
+    .pillar-desc { font-size: 0.7rem; font-weight: 500; color: var(--text-dim); line-height: 1.35; }
+
+    /* COMEX GRID */
+    .comex-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 0.5rem; }
+    .comex-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; transition: var(--transition); }
+    .comex-card:hover { border-color: var(--border-light); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
+    .comex-card-head { padding: 0.75rem 0.6rem 0.5rem; text-align: center; border-bottom: 1px solid var(--border); }
+    .comex-avatar { width: 38px; height: 38px; border-radius: 50%; margin: 0 auto 0.3rem; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 800; color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+    .comex-name { font-size: 0.82rem; font-weight: 800; color: var(--text); }
+    .comex-focus { font-size: 0.62rem; font-weight: 700; color: var(--accent); margin-top: 0.1rem; line-height: 1.3; }
+    .comex-topics { padding: 0.5rem 0.6rem; }
+    .comex-topic-label { font-size: 0.52rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 0.25rem; }
+    .comex-topic-item { font-size: 0.68rem; color: var(--text-secondary); padding: 0.12rem 0; display: flex; align-items: flex-start; gap: 0.3rem; line-height: 1.35; }
+    .comex-topic-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 5.5px; }
+
+    /* EXEC GRID */
+    .exec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
+
+    /* FILE LIST */
+    .file-list { list-style: none; }
+    .file-item { display: flex; align-items: flex-start; gap: 0.65rem; padding: 0.55rem 0; border-bottom: 1px solid var(--border); }
+    .file-item:last-child { border-bottom: none; }
+    .file-icon { width: 30px; height: 30px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; }
+    .file-info { flex: 1; }
+    .file-name { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+    .file-desc { font-size: 0.72rem; color: var(--text-dim); line-height: 1.4; margin-top: 0.1rem; }
+    .file-tag { font-size: 0.58rem; font-weight: 700; padding: 0.1rem 0.4rem; border-radius: 999px; flex-shrink: 0; margin-top: 2px; }
+
+    /* AMPLIFICATION FLOW */
+    .amp-flow { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.75rem; align-items: stretch; }
+    .amp-column { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1rem 1.1rem; transition: var(--transition); }
+    .amp-column:hover { border-color: var(--border-light); }
+    .amp-trigger { display: flex; align-items: center; justify-content: center; }
+    .amp-label { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.4rem; }
+    .amp-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .amp-step { font-size: 0.8rem; color: var(--text-secondary); padding: 0.28rem 0; display: flex; align-items: flex-start; gap: 0.45rem; line-height: 1.45; }
+    .amp-step strong { color: var(--text); }
+    .amp-step-num { font-size: 0.58rem; font-weight: 800; color: var(--accent); background: var(--accent-glow); width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .amp-version-tag { font-size: 0.55rem; font-weight: 800; padding: 0.12rem 0.5rem; border-radius: 999px; margin-bottom: 0.4rem; display: inline-block; letter-spacing: 0.04em; }
+
+    /* KPI TABLE */
+    .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+    .kpi-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.75rem 0.75rem; text-align: center; transition: var(--transition); }
+    .kpi-card:hover { border-color: var(--border-light); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+    .kpi-icon { font-size: 1.2rem; margin-bottom: 0.25rem; }
+    .kpi-name { font-size: 0.78rem; font-weight: 700; color: var(--text); margin-bottom: 0.1rem; }
+    .kpi-platform { font-size: 0.6rem; font-weight: 500; color: var(--text-dim); }
+
+    /* TIMELINE */
+    .phase-timeline { display: flex; gap: 0.3rem; margin-bottom: 0.6rem; }
+    .phase-step { flex: 1; display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); position: relative; transition: var(--transition); }
+    .phase-step:hover { border-color: var(--border-light); }
+    .phase-step.current { border-color: rgba(255,106,0,0.35); background: rgba(255,106,0,0.06); }
+    .phase-step.upcoming { border-color: var(--border); opacity: 0.45; }
+    .phase-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .phase-step.current .phase-dot { background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: pulse-phase 2.5s ease-in-out infinite; }
+    .phase-step.upcoming .phase-dot { background: var(--border-light); }
+    @keyframes pulse-phase { 0%,100% { box-shadow: 0 0 6px var(--accent); } 50% { box-shadow: 0 0 18px var(--accent); } }
+    .phase-label { font-size: 0.78rem; font-weight: 700; }
+    .phase-step.current .phase-label { color: var(--accent); }
+    .phase-step.upcoming .phase-label { color: var(--text-dim); }
+    .phase-here { position: absolute; top: -0.55rem; right: 0.5rem; font-size: 0.52rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #fff; background: var(--accent); padding: 0.1rem 0.45rem; border-radius: 99px; }
+
+    /* LEADERBOARD */
+    .leaderboard { width: 100%; border-collapse: collapse; }
+    .leaderboard th { padding: 0.5rem 0.85rem; font-size: 0.62rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); text-align: left; border-bottom: 1px solid var(--border); background: var(--surface-2); }
+    .leaderboard td { padding: 0.55rem 0.85rem; font-size: 0.82rem; border-bottom: 1px solid var(--border); }
+    .leaderboard tr:last-child td { border-bottom: none; }
+    .leaderboard tr:hover td { background: rgba(255,255,255,0.015); }
+
+    /* RESULT HIGHLIGHTS */
+    .result-highlights { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+    .result-hl { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.65rem 0.75rem; text-align: center; transition: var(--transition); }
+    .result-hl:hover { border-color: var(--border-light); }
+    .result-hl-val { font-size: 1.6rem; font-weight: 900; line-height: 1; letter-spacing: -0.02em; }
+    .result-hl-label { font-size: 0.6rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 0.2rem; }
+    .result-hl-sub { font-size: 0.55rem; color: var(--text-dim); margin-top: 0.1rem; }
+
+    /* SUB ITEMS */
+    .sub-bullet { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+    /* CALLOUT */
+    .callout { font-size: 0.72rem; color: var(--text-dim); line-height: 1.5; padding: 0.6rem 0.85rem; background: rgba(255,85,0,0.03); border-radius: var(--radius-xs); border: 1px solid var(--border); }
+    .callout strong { color: var(--text-secondary); font-weight: 600; }
+
+    /* QUOTE BLOCK */
+    .quote-block { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; padding: 0.85rem 1.1rem; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); border-left: 3px solid var(--accent); margin-bottom: 1.25rem; max-width: 800px; }
+    .quote-block strong { color: var(--text); }
+
+    /* FOOTER */
+    .page-footer { max-width: 1400px; margin: 0 auto; padding: 0 2.5rem 2rem; position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .page-footer span { font-size: 0.6rem; font-weight: 600; color: var(--text-dim); letter-spacing: 0.03em; }
+
+    /* PRINT */
+    @media print { body { background: #fff; color: #1a1a1a; } .nav, .bg-glow, .page-footer { display: none; } .view { display: block !important; } .hero { background: #f5f5f5 !important; border: 1px solid #ddd; } .card { break-inside: avoid; } }
+
+    /* RESPONSIVE */
+    @media (min-width: 1441px) { .container { max-width: 1400px; } .nav-inner { max-width: 1400px; } }
+    @media (max-width: 1280px) {
+      .container { padding: 0.75rem 1.25rem 2rem; }
+      .nav-inner { padding: 0 1.25rem; }
+      .nav-tabs li { padding: 0.2rem 0.45rem; font-size: 0.68rem; }
+      .hero { padding: 1rem 1.5rem; }
+      .hero h1 { font-size: 1.5rem; }
+      .comex-grid { grid-template-columns: repeat(4, 1fr); }
+      .result-highlights { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 1024px) {
+      .exec-grid { grid-template-columns: 1fr; }
+      .amp-flow { grid-template-columns: 1fr; }
+      .amp-trigger { display: none; }
+      .comex-grid { grid-template-columns: repeat(4, 1fr); }
+      .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+      .pillar-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .container { padding: 0.5rem 0.75rem 2rem; }
+      .nav-brand, .nav-divider, .nav-confidential { display: none; }
+      .nav-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+      .nav-tabs::-webkit-scrollbar { display: none; }
+      .comex-grid { grid-template-columns: repeat(2, 1fr); }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .phase-timeline { flex-direction: column; }
+      .hero h1 { font-size: 1.3rem; }
+    }
+    @media (max-width: 480px) {
+      .container { padding: 0.4rem 0.5rem 1.5rem; }
+      .hero { padding: 0.75rem 1rem; }
+      .hero h1 { font-size: 1.1rem; }
+      .hero-meta-bar { flex-direction: column; gap: 0.3rem; }
+      .comex-grid { grid-template-columns: 1fr 1fr; }
+      .result-highlights { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-glow"><div class="orb"></div><div class="orb"></div><div class="orb"></div></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-brand">Ledger</div>
+    <div class="nav-divider"></div>
+    <ul class="nav-tabs" id="navTabs">
+      <li class="active" data-view="results">Results</li>
+      <li data-view="strategy">Strategy</li>
+      <li data-view="comex">Comex Matrix</li>
+      <li data-view="topics">Topic Engine</li>
+      <li data-view="execution">Execution</li>
+      <li data-view="amplification">Amplification</li>
+      <li data-view="measurement">Measurement</li>
+    </ul>
+    <div class="nav-confidential">Internal</div>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-top">
+    <div class="hero-badge">Comex Strategy</div>
+    <div class="hero-q">2026</div>
+  </div>
+  <h1>Thought Leadership<br>Amplification</h1>
+  <div class="hero-sub">A coordinated system for converting Comex domain expertise into sustained market influence — one narrative, eight voices, measurable impact.</div>
+  <div class="hero-meta-bar">
+    <div class="hero-meta-item"><span>March 2026</span></div>
+    <div class="hero-meta-item">Format: <span>Strategy &amp; Execution Playbook</span></div>
+    <div class="hero-meta-item">Status: <span style="color:var(--accent);">Active</span></div>
+  </div>
+</div>
+
+<!-- ══════════ RESULTS & TARGETS ══════════ -->
+<div id="results" class="view active">
+  <div class="card">
+    <div class="card-head">
+      <div class="section-num orange">1</div>
+      <div class="section-title">Results &amp; Targets</div>
+      <div class="section-badge">Q4 2025 → Q1 2026 · Q2 Targets</div>
+    </div>
+    <div class="section-body">
+      <div class="section-intro">
+        Early momentum validates the amplification model. Here's where we landed — and where we're heading next.
+      </div>
+
+      <div class="label-sm">Q1 2026 — Performance vs. Q4 2025</div>
+      <div class="result-highlights">
+        <div class="result-hl" style="border-top: 2px solid var(--green);">
+          <div class="result-hl-val" style="color:var(--green);">+114%</div>
+          <div class="result-hl-label">Likes on X</div>
+          <div class="result-hl-sub">398 → 851</div>
+        </div>
+        <div class="result-hl" style="border-top: 2px solid var(--green);">
+          <div class="result-hl-val" style="color:var(--green);">+194%</div>
+          <div class="result-hl-label">Comments on LI</div>
+          <div class="result-hl-sub">17 → 50</div>
+        </div>
+        <div class="result-hl" style="border-top: 2px solid var(--accent);">
+          <div class="result-hl-val" style="color:var(--accent);">+55%</div>
+          <div class="result-hl-label">Retweets on X</div>
+          <div class="result-hl-sub">192 → 297</div>
+        </div>
+        <div class="result-hl" style="border-top: 2px solid var(--blue);">
+          <div class="result-hl-val" style="color:var(--blue);">+54%</div>
+          <div class="result-hl-label">Likes on LI</div>
+          <div class="result-hl-sub">442 → 681</div>
+        </div>
+      </div>
+
+      <div class="label-sm">Q2 2026 — Targets</div>
+      <div class="result-highlights" style="margin-bottom:1.5rem;">
+        <div class="result-hl" style="border-top: 2px solid var(--amber);">
+          <div class="result-hl-val" style="color:var(--amber);">1,500</div>
+          <div class="result-hl-label">Likes on X</div>
+          <div class="result-hl-sub">+76% from Q1</div>
+        </div>
+        <div class="result-hl" style="border-top: 2px solid var(--amber);">
+          <div class="result-hl-val" style="color:var(--amber);">350K</div>
+          <div class="result-hl-label">Impressions on X</div>
+          <div class="result-hl-sub">+57% from Q1</div>
+        </div>
+        <div class="result-hl" style="border-top: 2px solid var(--amber);">
+          <div class="result-hl-val" style="color:var(--amber);">1,000</div>
+          <div class="result-hl-label">Likes on LI</div>
+          <div class="result-hl-sub">+47% from Q1</div>
+        </div>
+        <div class="result-hl" style="border-top: 2px solid var(--amber);">
+          <div class="result-hl-val" style="color:var(--amber);">18</div>
+          <div class="result-hl-label">Total Posts</div>
+          <div class="result-hl-sub">10 on X · 8 on LI</div>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+        <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow:hidden;">
+          <div style="padding:0.65rem 1rem; border-bottom: 1px solid var(--border); display:flex; align-items:center; gap:0.5rem;">
+            <span style="font-size:1rem; font-weight:900; color:var(--text);">𝕏</span>
+            <span style="font-size:0.85rem; font-weight:800; color:var(--text);">X (Twitter)</span>
+          </div>
+          <table class="leaderboard">
+            <thead><tr><th></th><th>Q4 '25</th><th>Q1 '26</th><th>Δ</th><th style="color:var(--amber);">Q2 Target</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:700;">Posts</td><td style="color:var(--text-secondary);">4</td><td style="font-weight:700;">6</td><td><span style="color:var(--green); font-weight:700;">+50%</span></td><td style="color:var(--amber); font-weight:700;">10</td></tr>
+              <tr><td style="font-weight:700;">Impressions</td><td style="color:var(--text-secondary);">215,209</td><td style="font-weight:700;">222,450</td><td><span style="color:var(--green); font-weight:700;">+3%</span></td><td style="color:var(--amber); font-weight:700;">350,000</td></tr>
+              <tr><td style="font-weight:700;">Likes</td><td style="color:var(--text-secondary);">398</td><td style="font-weight:700;">851</td><td><span style="color:var(--green); font-weight:700;">+114%</span></td><td style="color:var(--amber); font-weight:700;">1,500</td></tr>
+              <tr><td style="font-weight:700;">Retweets</td><td style="color:var(--text-secondary);">192</td><td style="font-weight:700;">297</td><td><span style="color:var(--green); font-weight:700;">+55%</span></td><td style="color:var(--amber); font-weight:700;">500</td></tr>
+              <tr><td style="font-weight:700;">Comments</td><td style="color:var(--text-secondary);">202</td><td style="font-weight:700;">287</td><td><span style="color:var(--green); font-weight:700;">+42%</span></td><td style="color:var(--amber); font-weight:700;">450</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow:hidden;">
+          <div style="padding:0.65rem 1rem; border-bottom: 1px solid var(--border); display:flex; align-items:center; gap:0.5rem;">
+            <span style="font-size:0.95rem; font-weight:900; color:var(--blue);">in</span>
+            <span style="font-size:0.85rem; font-weight:800; color:var(--text);">LinkedIn</span>
+          </div>
+          <table class="leaderboard">
+            <thead><tr><th></th><th>Q4 '25</th><th>Q1 '26</th><th>Δ</th><th style="color:var(--amber);">Q2 Target</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:700;">Posts</td><td style="color:var(--text-secondary);">3</td><td style="font-weight:700;">5</td><td><span style="color:var(--green); font-weight:700;">+66%</span></td><td style="color:var(--amber); font-weight:700;">8</td></tr>
+              <tr><td style="font-weight:700;">Likes</td><td style="color:var(--text-secondary);">442</td><td style="font-weight:700;">681</td><td><span style="color:var(--green); font-weight:700;">+54%</span></td><td style="color:var(--amber); font-weight:700;">1,000</td></tr>
+              <tr><td style="font-weight:700;">Reposts</td><td style="color:var(--text-secondary);">62</td><td style="font-weight:700;">49</td><td><span style="color:var(--red); font-weight:700;">-21%</span></td><td style="color:var(--amber); font-weight:700;">100</td></tr>
+              <tr><td style="font-weight:700;">Comments</td><td style="color:var(--text-secondary);">17</td><td style="font-weight:700;">50</td><td><span style="color:var(--green); font-weight:700;">+194%</span></td><td style="color:var(--amber); font-weight:700;">100</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ STRATEGY ══════════ -->
+<div id="strategy" class="view">
+  <div class="card">
+    <div class="card-head">
+      <div class="section-num orange">2</div>
+      <div class="section-title">Strategic Thesis</div>
+    </div>
+    <div class="section-body">
+      <div class="section-intro">
+        A <strong>decentralized amplification model</strong> that channels each Comex member's domain expertise through a unified narrative — transforming individual authority into a <span class="hl">coordinated signal</span> the market can't ignore.
+      </div>
+
+      <div class="label-sm">The Narrative Framework</div>
+      <div class="quote-block">
+        Every piece of Comex content, regardless of domain, reinforces one meta-narrative: <strong>the world is shifting to digital ownership, and Ledger is building the trust infrastructure that makes it possible.</strong>
+      </div>
+
+      <div class="label-sm">Four Pillars</div>
+      <div class="pillar-grid">
+        <div class="pillar-card" style="border-top: 2px solid var(--accent);">
+          <div class="pillar-num" style="color:var(--accent);">01</div>
+          <div class="pillar-title">Digital Ownership as Infrastructure</div>
+          <div class="pillar-desc">Frame the shift as foundational, not speculative</div>
+        </div>
+        <div class="pillar-card" style="border-top: 2px solid var(--green);">
+          <div class="pillar-num" style="color:var(--green);">02</div>
+          <div class="pillar-title">Ledger as the Trust Layer</div>
+          <div class="pillar-desc">Position security as the critical enabler of adoption</div>
+        </div>
+        <div class="pillar-card" style="border-top: 2px solid var(--blue);">
+          <div class="pillar-num" style="color:var(--blue);">03</div>
+          <div class="pillar-title">Agentic AI Risks &amp; Security</div>
+          <div class="pillar-desc">Own the intersection of AI autonomy and asset protection</div>
+        </div>
+        <div class="pillar-card" style="border-top: 2px solid var(--purple);">
+          <div class="pillar-num" style="color:var(--purple);">04</div>
+          <div class="pillar-title">Signers &amp; Ledger Wallet</div>
+          <div class="pillar-desc">Hardware signing as the non-negotiable security primitive</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Mechanism:</strong> Each Comex member speaks through their domain lens — security, policy, enterprise, macro — but every message ladders up to these four pillars. The audience experiences a chorus, not a solo.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ COMEX MATRIX ══════════ -->
+<div id="comex" class="view">
+  <div class="card">
+    <div class="card-head">
+      <div class="section-num orange">3</div>
+      <div class="section-title">Comex Domain Matrix</div>
+      <div class="section-badge">8 voices · 1 narrative</div>
+    </div>
+    <div class="section-body">
+      <div class="section-intro">
+        Each Comex member operates as an <strong>autonomous thought leadership node</strong> — owning their domain while amplifying the collective signal. Topics are calibrated to expertise and credibility.
+      </div>
+
+      <div class="comex-grid">
+        <div class="comex-card">
+          <div class="comex-card-head">
+            <div class="comex-avatar" style="background: linear-gradient(135deg, #ec4899, #f472b6);">PA</div>
+            <div class="comex-name">Pascal</div>
+            <div class="comex-focus">Macro &amp; Vision</div>
+          </div>
+          <div class="comex-topics">
+            <div class="comex-topic-label">Topics</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Future of digital value &amp; ownership</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Institutional trust infrastructure</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Macro thesis &amp; industry direction</div>
+          </div>
+        </div>
+
+        <div class="comex-card">
+          <div class="comex-card-head">
+            <div class="comex-avatar" style="background: linear-gradient(135deg, #ff5500, #ff8c42);">AL</div>
+            <div class="comex-name">Alex</div>
+            <div class="comex-focus">Ethos &amp; People</div>
+          </div>
+          <div class="comex-topics">
+            <div class="comex-topic-label">Topics</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Company culture as competitive moat</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Builder mentality &amp; long-term vision</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Talent in crypto &amp; security</div>
+          </div>
+        </div>
+
+        <div class="comex-card">
+          <div class="comex-card-head">
+            <div class="comex-avatar" style="background: linear-gradient(135deg, #6366f1, #818cf8);">AR</div>
+            <div class="comex-name">Ariel</div>
+            <div class="comex-focus">Culture &amp; Society</div>
+          </div>
+          <div class="comex-topics">
+            <div class="comex-topic-label">Topics</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Digital ownership as cultural shift</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Web3 adoption &amp; mainstream access</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Societal impact of self-custody</div>
+          </div>
+        </div>
+
+        <div class="comex-card">
+          <div class="comex-card-head">
+            <div class="comex-avatar" style="background: linear-gradient(135deg, #34d399, #10b981);">CH</div>
+            <div class="comex-name">Charles</div>
+            <div class="comex-focus">Security &amp; Research</div>
+          </div>
+          <div class="comex-topics">
+            <div class="comex-topic-label">Topics</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Agentic AI threat landscape</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Hardware security breakthroughs</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Zero-trust signing architecture</div>
+          </div>
+        </div>
+
+        <div class="comex-card">
+          <div class="comex-card-head">
+            <div class="comex-avatar" style="background: linear-gradient(135deg, #f97316, #fb923c);">JF</div>
+            <div class="comex-name">JF</div>
+            <div class="comex-focus">Ledger Wallet</div>
+          </div>
+          <div class="comex-topics">
+            <div class="comex-topic-label">Topics</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Wallet experience &amp; product vision</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> User-facing security innovation</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Self-custody UX &amp; adoption</div>
+          </div>
+        </div>
+
+        <div class="comex-card">
+          <div class="comex-card-head">
+            <div class="comex-avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706);">IA</div>
+            <div class="comex-name">Ian</div>
+            <div class="comex-focus">Hardware &amp; Integration, AI</div>
+          </div>
+          <div class="comex-topics">
+            <div class="comex-topic-label">Topics</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Hardware as trust anchor</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Supply chain &amp; chip security</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> AI integration &amp; device-level signing</div>
+          </div>
+        </div>
+
+        <div class="comex-card">
+          <div class="comex-card-head">
+            <div class="comex-avatar" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">SE</div>
+            <div class="comex-name">Seb</div>
+            <div class="comex-focus">B2B &amp; Enterprise</div>
+          </div>
+          <div class="comex-topics">
+            <div class="comex-topic-label">Topics</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Enterprise digital asset custody</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Institutional security requirements</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> B2B trust &amp; compliance narratives</div>
+          </div>
+        </div>
+
+        <div class="comex-card">
+          <div class="comex-card-head">
+            <div class="comex-avatar" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">ST</div>
+            <div class="comex-name">Seth</div>
+            <div class="comex-focus">Policy &amp; Gov Relations</div>
+          </div>
+          <div class="comex-topics">
+            <div class="comex-topic-label">Topics</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Regulatory clarity as growth enabler</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Government engagement &amp; frameworks</div>
+            <div class="comex-topic-item"><span class="comex-topic-dot"></span> Policy positions on self-custody</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TOPICS ══════════ -->
+<div id="topics" class="view">
+  <div class="card">
+    <div class="card-head">
+      <div class="section-num orange">4</div>
+      <div class="section-title">Topic Engine</div>
+      <div class="section-badge">Discovery &amp; Selection</div>
+    </div>
+    <div class="section-body">
+      <div class="label-sm">Discovery — Input Streams</div>
+      <div class="section-intro" style="margin-bottom:0.75rem;">
+        Topics are sourced from <strong>four input streams</strong> — real-time signal detection combined with scheduled strategic content.
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.5rem;">
+        <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding:0.85rem 0.85rem; border-top: 2px solid var(--accent); transition: var(--transition);">
+          <div style="font-size:1rem; margin-bottom:0.4rem;">📡</div>
+          <div style="font-size:0.82rem; font-weight:800; color:var(--text); margin-bottom:0.2rem;">Signal Listening</div>
+          <div style="font-size:0.7rem; color:var(--text-secondary); line-height:1.4; margin-bottom:0.4rem;">Social topic alerts — surfacing emerging conversations in real time</div>
+          <span style="font-size:0.55rem; font-weight:800; color:var(--accent); background:var(--accent-glow); padding:0.12rem 0.45rem; border-radius:99px;">Daily</span>
+        </div>
+        <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding:0.85rem 0.85rem; border-top: 2px solid var(--blue); transition: var(--transition);">
+          <div style="font-size:1rem; margin-bottom:0.4rem;">🤖</div>
+          <div style="font-size:0.82rem; font-weight:800; color:var(--text); margin-bottom:0.2rem;">AI Conversation</div>
+          <div style="font-size:0.7rem; color:var(--text-secondary); line-height:1.4; margin-bottom:0.4rem;">Tailored web search prompts — proactive trend and data discovery</div>
+          <span style="font-size:0.55rem; font-weight:800; color:var(--blue); background:var(--blue-glow); padding:0.12rem 0.45rem; border-radius:99px;">Daily</span>
+        </div>
+        <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding:0.85rem 0.85rem; border-top: 2px solid var(--green); transition: var(--transition);">
+          <div style="font-size:1rem; margin-bottom:0.4rem;">💬</div>
+          <div style="font-size:0.82rem; font-weight:800; color:var(--text); margin-bottom:0.2rem;">Crowd Source Slack</div>
+          <div style="font-size:0.7rem; color:var(--text-secondary); line-height:1.4; margin-bottom:0.4rem;">#whatsinFT / Mirror / McKinsey / Econ &amp; #AI_at_Ledger</div>
+          <span style="font-size:0.55rem; font-weight:800; color:var(--green); background:var(--green-glow); padding:0.12rem 0.45rem; border-radius:99px;">Daily</span>
+        </div>
+        <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding:0.85rem 0.85rem; border-top: 2px solid var(--purple); transition: var(--transition);">
+          <div style="font-size:1rem; margin-bottom:0.4rem;">📅</div>
+          <div style="font-size:0.82rem; font-weight:800; color:var(--text); margin-bottom:0.2rem;">Scheduled Content</div>
+          <div style="font-size:0.7rem; color:var(--text-secondary); line-height:1.4; margin-bottom:0.4rem;">Product &amp; Europe roadmaps — planned narrative anchors</div>
+          <span style="font-size:0.55rem; font-weight:800; color:var(--purple); background:var(--purple-glow); padding:0.12rem 0.45rem; border-radius:99px;">Monthly</span>
+        </div>
+      </div>
+
+      <div style="margin-top:1.5rem; padding-top:1.25rem; border-top: 1px solid var(--border);">
+      <div class="label-sm">Selection — Scoring Criteria</div>
+      <div class="section-intro" style="margin-bottom:0.75rem;">
+        Every potential topic is scored across <strong>four dimensions</strong> before it reaches a Comex member's feed.
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+        <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding:0.9rem 1.1rem; display:flex; align-items:flex-start; gap:0.75rem; transition: var(--transition);">
+          <div style="font-size:1.5rem; font-weight:900; color:var(--accent); line-height:1; flex-shrink:0; font-family:'JetBrains Mono',monospace;">01</div>
+          <div>
+            <div style="font-size:0.88rem; font-weight:800; color:var(--text); margin-bottom:0.15rem;">Recency</div>
+            <div style="font-size:0.75rem; color:var(--text-secondary); line-height:1.45;">How fresh is the intelligence? Time-to-detection determines whether we lead the conversation or follow it.</div>
+          </div>
+        </div>
+        <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding:0.9rem 1.1rem; display:flex; align-items:flex-start; gap:0.75rem; transition: var(--transition);">
+          <div style="font-size:1.5rem; font-weight:900; color:var(--green); line-height:1; flex-shrink:0; font-family:'JetBrains Mono',monospace;">02</div>
+          <div>
+            <div style="font-size:0.88rem; font-weight:800; color:var(--text); margin-bottom:0.15rem;">Domain Relevance</div>
+            <div style="font-size:0.75rem; color:var(--text-secondary); line-height:1.45;">Does it map to a Comex member's domain and ladder up to the narrative pillars?</div>
+          </div>
+        </div>
+        <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding:0.9rem 1.1rem; display:flex; align-items:flex-start; gap:0.75rem; transition: var(--transition);">
+          <div style="font-size:1.5rem; font-weight:900; color:var(--blue); line-height:1; flex-shrink:0; font-family:'JetBrains Mono',monospace;">03</div>
+          <div>
+            <div style="font-size:0.88rem; font-weight:800; color:var(--text); margin-bottom:0.15rem;">Emerging vs. Trending</div>
+            <div style="font-size:0.75rem; color:var(--text-secondary); line-height:1.45;">New signal or established wave? Early signals build authority; trending topics drive reach.</div>
+          </div>
+        </div>
+        <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding:0.9rem 1.1rem; display:flex; align-items:flex-start; gap:0.75rem; transition: var(--transition);">
+          <div style="font-size:1.5rem; font-weight:900; color:var(--amber); line-height:1; flex-shrink:0; font-family:'JetBrains Mono',monospace;">04</div>
+          <div>
+            <div style="font-size:0.88rem; font-weight:800; color:var(--text); margin-bottom:0.15rem;">Engagement Potential</div>
+            <div style="font-size:0.75rem; color:var(--text-secondary); line-height:1.45;">How is the market reacting? Volume &amp; sentiment reveal whether the topic has momentum worth capturing.</div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ EXECUTION ══════════ -->
+<div id="execution" class="view">
+  <div class="card">
+    <div class="card-head">
+      <div class="section-num orange">5</div>
+      <div class="section-title">Execution Framework</div>
+    </div>
+    <div class="section-body">
+      <div class="section-intro">
+        Each Comex member executes via their <strong>preferred AI content creation setup</strong>. Brand consistency is enforced through a shared library of markdown files that act as guardrails for any AI tool.
+      </div>
+
+      <div class="label-sm">Brand Guardrail Files</div>
+      <div class="exec-grid" style="margin-bottom:1rem;">
+        <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.9rem 1rem;">
+          <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.6rem;">
+            <span style="font-size:0.58rem; font-weight:800; color:#fff; background:var(--accent); padding:0.12rem 0.5rem; border-radius:99px;">SYSTEM-LEVEL</span>
+            <span style="font-size:0.62rem; color:var(--text-dim);">Iterated by Brand Development Team</span>
+          </div>
+          <ul class="file-list">
+            <li class="file-item">
+              <div class="file-icon" style="background: var(--accent-glow);">📄</div>
+              <div class="file-info">
+                <div class="file-name">Ledger Soul</div>
+                <div class="file-desc">What Ledger stands for, believes, and defends. The soul of every message.</div>
+              </div>
+              <span class="file-tag" style="background:var(--accent-glow); color:var(--accent);">Shared</span>
+            </li>
+            <li class="file-item">
+              <div class="file-icon" style="background: var(--green-glow);">📄</div>
+              <div class="file-info">
+                <div class="file-name">Brand Operating System</div>
+                <div class="file-desc">How the Ledger Soul translates into voice, visual language, and content principles.</div>
+              </div>
+              <span class="file-tag" style="background:var(--green-glow); color:var(--green);">Shared</span>
+            </li>
+            <li class="file-item">
+              <div class="file-icon" style="background: var(--blue-glow);">📄</div>
+              <div class="file-info">
+                <div class="file-name">Writing Guardrails</div>
+                <div class="file-desc">Ensures output doesn't read like AI. Eliminates filler, enforces specificity.</div>
+              </div>
+              <span class="file-tag" style="background:var(--blue-glow); color:var(--blue);">Shared</span>
+            </li>
+          </ul>
+        </div>
+
+        <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.9rem 1rem;">
+          <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.6rem;">
+            <span style="font-size:0.58rem; font-weight:800; color:#fff; background:var(--purple); padding:0.12rem 0.5rem; border-radius:99px;">MEMBER-LEVEL</span>
+            <span style="font-size:0.62rem; color:var(--text-dim);">Iterated per Comex member</span>
+          </div>
+          <ul class="file-list">
+            <li class="file-item">
+              <div class="file-icon" style="background: var(--purple-glow);">📄</div>
+              <div class="file-info">
+                <div class="file-name">Comex_Member_TOV</div>
+                <div class="file-desc">Personal tone of voice profile — creative rules so AI output sounds authentically like the individual. Iterated continuously.</div>
+              </div>
+              <span class="file-tag" style="background:var(--purple-glow); color:var(--purple);">Per Member</span>
+            </li>
+          </ul>
+
+          <div style="margin-top:0.75rem; padding-top:0.75rem; border-top: 1px solid var(--border);">
+            <div class="label-sm" style="margin-bottom:0.3rem;">How to Use</div>
+            <div style="font-size:0.8rem; color:var(--text-secondary); line-height:1.55;">
+              <div style="display:flex; align-items:flex-start; gap:0.4rem; margin-bottom:0.25rem;">
+                <span style="color:var(--accent); font-weight:700;">A.</span> Apply all four files to the context window of your preferred AI tool
+              </div>
+              <div style="display:flex; align-items:flex-start; gap:0.4rem;">
+                <span style="color:var(--accent); font-weight:700;">B.</span> Or use the shared TOV Gemini Gem — pre-loaded via Google Drive
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Iteration model:</strong> Files 1–3 (Ledger Soul, Brand OS, Writing Guardrails) are maintained at the system level by Brand Development. The Comex_Member_TOV is owned by each member and continuously refined based on output quality.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ AMPLIFICATION ══════════ -->
+<div id="amplification" class="view">
+  <div class="card">
+    <div class="card-head">
+      <div class="section-num orange">6</div>
+      <div class="section-title">Amplification Engine</div>
+    </div>
+    <div class="section-body">
+      <div class="section-intro">
+        Every Comex post triggers <strong>two parallel amplification streams</strong> — internal employee network and external agency network — generating critical early momentum within hours of publishing.
+      </div>
+
+      <div class="amp-flow" style="margin-bottom:1.25rem;">
+        <div class="amp-column">
+          <div class="amp-label"><span class="amp-dot" style="background:var(--green);"></span> <span style="color:var(--green);">Internal Employee Network</span></div>
+
+          <div class="amp-version-tag" style="background:var(--accent-glow); color:var(--accent);">MVP</div>
+          <div class="amp-step"><span class="amp-step-num">1</span> Dedicated Slack channel for thought leadership — <strong>read-only</strong></div>
+          <div class="amp-step"><span class="amp-step-num">2</span> Automated script publishes every Comex social post to the channel in real time</div>
+          <div class="amp-step"><span class="amp-step-num">3</span> Internal comms &amp; HR coordination to incentivize employee engagement on social</div>
+
+          <div style="height:0.6rem;"></div>
+          <div class="amp-version-tag" style="background:var(--blue-glow); color:var(--blue);">V1</div>
+          <div class="amp-step"><span class="amp-step-num">4</span> Social media bot for guided employee interaction with Comex content</div>
+          <div class="amp-step"><span class="amp-step-num">5</span> Scoring mechanism &amp; leaderboard for most engaged internal amplifiers</div>
+        </div>
+
+        <div class="amp-trigger">
+          <div style="text-align:center;">
+            <div style="font-size:0.52rem; font-weight:800; text-transform:uppercase; letter-spacing:0.12em; color:var(--text-dim); margin-bottom:0.4rem;">Trigger</div>
+            <div style="width:52px; height:52px; border-radius:50%; background:var(--accent-glow); border:2px solid var(--accent); display:flex; align-items:center; justify-content:center; margin:0 auto 0.4rem; box-shadow: 0 0 20px rgba(255,85,0,0.15);">
+              <span style="font-size:1.2rem;">⚡</span>
+            </div>
+            <div style="font-size:0.7rem; font-weight:700; color:var(--accent);">Comex Post</div>
+            <div style="font-size:0.58rem; color:var(--text-dim);">LinkedIn / X</div>
+          </div>
+        </div>
+
+        <div class="amp-column">
+          <div class="amp-label"><span class="amp-dot" style="background:var(--blue);"></span> <span style="color:var(--blue);">External Agency Network</span></div>
+
+          <div class="amp-step"><span class="amp-step-num">1</span> <strong>@nabu</strong> has read-only access to the Slack thought leadership channel</div>
+          <div class="amp-step"><span class="amp-step-num">2</span> @nabu activates amplification network across LinkedIn &amp; X</div>
+          <div class="amp-step"><span class="amp-step-num">3</span> Coordinated like &amp; reply strategy to boost algorithmic distribution</div>
+          <div class="amp-step"><span class="amp-step-num">4</span> Five groups of KOLs, listed by follower count, incentivized to engage</div>
+        </div>
+      </div>
+
+      <div class="label-sm">Amplification Sequence</div>
+      <div class="phase-timeline">
+        <div class="phase-step current">
+          <div class="phase-dot"></div>
+          <div class="phase-label">Comex Publishes</div>
+          <div class="phase-here">Start</div>
+        </div>
+        <div class="phase-step upcoming">
+          <div class="phase-dot"></div>
+          <div class="phase-label">Auto-posted to Slack</div>
+        </div>
+        <div class="phase-step upcoming">
+          <div class="phase-dot"></div>
+          <div class="phase-label">Employees Engage</div>
+        </div>
+        <div class="phase-step upcoming">
+          <div class="phase-dot"></div>
+          <div class="phase-label">@nabu Amplifies</div>
+        </div>
+        <div class="phase-step upcoming">
+          <div class="phase-dot"></div>
+          <div class="phase-label">Momentum Achieved</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MEASUREMENT ══════════ -->
+<div id="measurement" class="view">
+  <div class="card">
+    <div class="card-head">
+      <div class="section-num orange">7</div>
+      <div class="section-title">Measurement</div>
+      <div class="section-badge">KPIs &amp; Tracking Infrastructure</div>
+    </div>
+    <div class="section-body">
+      <div class="section-intro">
+        Comex output is measured through a <strong>competitive leaderboard</strong> across five core metrics, filtered by platform (X &amp; LinkedIn). A real-time dashboard eliminates manual reporting.
+      </div>
+
+      <div class="label-sm">Core Metrics</div>
+      <div class="kpi-grid">
+        <div class="kpi-card" style="border-top: 2px solid var(--accent);">
+          <div class="kpi-icon">📝</div>
+          <div class="kpi-name">Post Volume</div>
+          <div class="kpi-platform">Posts published per member</div>
+        </div>
+        <div class="kpi-card" style="border-top: 2px solid var(--green);">
+          <div class="kpi-icon">👁️</div>
+          <div class="kpi-name">Impressions</div>
+          <div class="kpi-platform">Reach per post &amp; cumulative</div>
+        </div>
+        <div class="kpi-card" style="border-top: 2px solid var(--blue);">
+          <div class="kpi-icon">💬</div>
+          <div class="kpi-name">Engagement</div>
+          <div class="kpi-platform">Likes · Shares · Reposts</div>
+        </div>
+        <div class="kpi-card" style="border-top: 2px solid var(--purple);">
+          <div class="kpi-icon">🔖</div>
+          <div class="kpi-name">Bookmarks</div>
+          <div class="kpi-platform">Content saved for reference</div>
+        </div>
+        <div class="kpi-card" style="border-top: 2px solid var(--amber);">
+          <div class="kpi-icon">📈</div>
+          <div class="kpi-name">Audience Growth</div>
+          <div class="kpi-platform">Follower delta per period</div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:0.5rem; margin-bottom:1.25rem;">
+        <div style="flex:1; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding:0.7rem 0.9rem;">
+          <div style="font-size:0.62rem; font-weight:800; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-dim); margin-bottom:0.15rem;">Secondary</div>
+          <div style="font-size:0.85rem; font-weight:700; color:var(--text); margin-bottom:0.1rem;">Brand Mentions</div>
+          <div style="font-size:0.72rem; color:var(--text-dim); line-height: 1.45;">Tracked via Google Alerts — measures organic spillover into broader brand visibility.</div>
+        </div>
+      </div>
+
+      <div class="label-sm">Leaderboard Template</div>
+      <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow:hidden; margin-bottom:1.5rem;">
+        <table class="leaderboard">
+          <thead>
+            <tr>
+              <th style="width:40px;">#</th>
+              <th>Member</th>
+              <th>Posts</th>
+              <th>Impressions</th>
+              <th>Engagement</th>
+              <th>Bookmarks</th>
+              <th>Audience Δ</th>
+              <th>Platform</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-weight:900; color:var(--accent);">1</td><td style="font-weight:700;">—</td><td style="color:var(--text-dim);">—</td><td style="color:var(--text-dim);">—</td><td style="color:var(--text-dim);">—</td><td style="color:var(--text-dim);">—</td><td style="color:var(--text-dim);">—</td><td><span style="font-size:0.62rem; padding:0.1rem 0.4rem; border-radius:99px; background:rgba(255,255,255,0.05); color:var(--text-dim);">X + LI</span></td></tr>
+            <tr><td style="font-weight:900; color:var(--text-dim);">2</td><td style="font-weight:700;">—</td><td style="color:var(--text-dim);">—</td><td style="color:var(--text-dim);">—</td><td style="color:var(--text-dim);">—</td><td style="color:var(--text-dim);">—</td><td style="color:var(--text-dim);">—</td><td><span style="font-size:0.62rem; padding:0.1rem 0.4rem; border-radius:99px; background:rgba(255,255,255,0.05); color:var(--text-dim);">X + LI</span></td></tr>
+            <tr><td style="font-weight:900; color:var(--text-dim);">3</td><td style="font-weight:700;">—</td><td style="color:var(--text-dim);">—</td><td style="color:var(--text-dim);">—</td><td style="color:var(--text-dim);">—</td><td style="color:var(--text-dim);">—</td><td style="color:var(--text-dim);">—</td><td><span style="font-size:0.62rem; padding:0.1rem 0.4rem; border-radius:99px; background:rgba(255,255,255,0.05); color:var(--text-dim);">X + LI</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="border-top: 1px solid var(--border); padding-top:1.25rem;">
+      <div class="label-sm">Real-Time Dashboard — Data Schema</div>
+      <div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:0.75rem;">Built by the Data Science Team, pulling from X and LinkedIn APIs. Zero manual reporting.</div>
+      <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow:hidden; margin-bottom:1rem;">
+        <table class="leaderboard">
+          <thead><tr><th>Data Point</th><th>Description</th><th>Refresh</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:700;">Author</td><td style="color:var(--text-secondary);">Comex member attributed to the post</td><td style="color:var(--text-dim);">On publish</td></tr>
+            <tr><td style="font-weight:700;">Date of Post</td><td style="color:var(--text-secondary);">Timestamp of original publication</td><td style="color:var(--text-dim);">On publish</td></tr>
+            <tr><td style="font-weight:700;">Post Content</td><td style="color:var(--text-secondary);">Full text of the published post</td><td style="color:var(--text-dim);">On publish</td></tr>
+            <tr><td style="font-weight:700;">Impressions</td><td style="color:var(--text-secondary);">Total views — snapshots at 1d and 7d, then rolling 7d</td><td><span style="font-size:0.68rem; padding:0.1rem 0.4rem; border-radius:99px; background:var(--accent-glow); color:var(--accent); font-weight:700;">1d · 7d · 7d+</span></td></tr>
+            <tr><td style="font-weight:700;">Likes</td><td style="color:var(--text-secondary);">Total like count — same cadence</td><td><span style="font-size:0.68rem; padding:0.1rem 0.4rem; border-radius:99px; background:var(--green-glow); color:var(--green); font-weight:700;">1d · 7d · 7d+</span></td></tr>
+            <tr><td style="font-weight:700;">Shares / Reposts</td><td style="color:var(--text-secondary);">Redistribution volume — same cadence</td><td><span style="font-size:0.68rem; padding:0.1rem 0.4rem; border-radius:99px; background:var(--blue-glow); color:var(--blue); font-weight:700;">1d · 7d · 7d+</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.65rem;">
+        <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.9rem 1rem;">
+          <div class="label-sm" style="color:var(--accent);">Snapshot Cadence</div>
+          <div style="font-size:0.8rem; color:var(--text-secondary); line-height:1.6;">
+            <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.15rem;"><span class="sub-bullet"></span> <strong style="color:var(--text);">Day 1:</strong> Initial performance read</div>
+            <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.15rem;"><span class="sub-bullet"></span> <strong style="color:var(--text);">Day 7:</strong> Post maturity snapshot</div>
+            <div style="display:flex; align-items:center; gap:0.4rem;"><span class="sub-bullet"></span> <strong style="color:var(--text);">Every 7d:</strong> Rolling refresh on all historical posts</div>
+          </div>
+        </div>
+        <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.9rem 1rem;">
+          <div class="label-sm" style="color:var(--accent);">Data Sources</div>
+          <div style="font-size:0.8rem; color:var(--text-secondary); line-height:1.6;">
+            <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.15rem;"><span class="sub-bullet"></span> <strong style="color:var(--text);">X (Twitter) API</strong> — post metrics &amp; audience data</div>
+            <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.15rem;"><span class="sub-bullet"></span> <strong style="color:var(--text);">LinkedIn API</strong> — post metrics &amp; audience data</div>
+            <div style="display:flex; align-items:center; gap:0.4rem;"><span class="sub-bullet"></span> <strong style="color:var(--text);">Google Alerts</strong> — brand mention tracking</div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div><!-- /container -->
+
+<footer class="page-footer">
+  <span>Ledger — Comex Thought Leadership Amplification Strategy</span>
+  <span>Internal &amp; Confidential · March 2026</span>
+</footer>
+
+<script>
+  const tabs = document.querySelectorAll('.nav-tabs li');
+  const views = document.querySelectorAll('.view');
+
+  function switchTab(tab) {
+    tabs.forEach(t => t.classList.remove('active'));
+    views.forEach(v => v.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.view).classList.add('active');
+  }
+
+  tabs.forEach(tab => tab.addEventListener('click', () => switchTab(tab)));
+
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+    const idx = [...tabs].findIndex(t => t.classList.contains('active'));
+    if (e.key === 'ArrowRight' && idx < tabs.length - 1) { switchTab(tabs[idx + 1]); e.preventDefault(); }
+    if (e.key === 'ArrowLeft' && idx > 0) { switchTab(tabs[idx - 1]); e.preventDefault(); }
+    if (e.key >= '1' && e.key <= String(tabs.length)) { switchTab(tabs[parseInt(e.key) - 1]); e.preventDefault(); }
+  });
+</script>
+
+</body>
+</html>

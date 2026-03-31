@@ -1,0 +1,15 @@
+export const WIDGET_TYPE_OPTIONS = [
+  { value: "kpi-card", label: "KPI card" },
+  { value: "comparison-band", label: "Comparison band" },
+  { value: "chart-widget", label: "Chart widget" },
+  { value: "annotated-chart", label: "Annotated chart" },
+  { value: "table-widget", label: "Table widget" },
+  { value: "narrative-insight", label: "Narrative insight" },
+  { value: "milestone-timeline", label: "Milestone timeline" },
+  { value: "risk-blocker-action", label: "Risk / blocker / action" },
+  { value: "evidence-widget", label: "Evidence widget" },
+  { value: "decision-log", label: "Decision log" },
+  { value: "quote-block", label: "Quote block" },
+  { value: "summary-strip", label: "Executive summary strip" },
+  { value: "note-widget", label: "Note widget" },
+] as const;
