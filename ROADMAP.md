@@ -59,3 +59,27 @@ Phase one ends with a clean runnable scaffold, not a sprawling half-built system
 - Add focused tests around imports, approvals, permissions, and share-link behavior.
 - Tighten accessibility, empty/error states, and operational logging.
 - Prepare production deployment, env validation, and documentation updates.
+
+## Phase 9: CSV-to-widget field binding UI
+- Add explicit binding UI so registry fields from uploaded CSVs can be wired to widget data contracts.
+- Let editors select "use field X as chart metric" or "use field Y as table rows" per widget instance.
+- Save bindings into WidgetInstance configJson so chart/table/KPI widgets can render from live import data.
+- Add saved template bindings per section so future imports automatically suggest the same bindings.
+- This is the bridge between Phase 4 (field registry) and Phase 5 (report builder) that makes CSV data flow into rendered widgets without manual JSON entry.
+
+## Phase 10: Admin operational tooling
+- Build out `admin/settings` with Period management, User management, and whitelist management.
+- Period manager: create, edit, and close reporting periods; set cadence, date range, and comparison period.
+- User manager: view all authenticated users, assign roles, toggle whitelist access.
+- Ensure the admin birds-eye board (`/admin`) is driven by real DB data, not mocks.
+
+## Phase 11: Audit trail and activity log
+- Add an ActivityLog model to track all significant write actions (imports, approvals, promotions, share link creation, role changes).
+- Expose the audit log in the admin settings view (recent 50 events, filterable by type).
+- Instrument all server actions with logActivity calls.
+- This is required for operational accountability before production hardening is complete.
+
+## Phase 12: Export enhancements
+- Add PDF/print rendering of approved outputs for offline distribution.
+- Consider a clean print stylesheet or a server-side PDF generation step (e.g. Puppeteer or a print-optimized route).
+- Share links continue to provide browser access; exports provide formal record-keeping artifacts.
