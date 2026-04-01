@@ -28,3 +28,9 @@ pnpm-debug.log*
 
 # macOS
 .DS_Store
+
+# TypeScript incremental build info
+tsconfig.tsbuildinfo
+
+# Claude Code agent worktrees (temp build directories)
+.claude/worktrees/
