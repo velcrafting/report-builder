@@ -2,11 +2,13 @@ import { AppShell } from "@/components/layout/app-shell";
 import { PageIntro } from "@/components/layout/page-intro";
 import { ImportWorkspace } from "@/components/imports/import-workspace";
 import { SurfaceCard } from "@/components/ui/surface-card";
-import { CADENCE_OPTIONS, SECTION_OPTIONS } from "@/config/sections";
-import { getImportWorkspaceSnapshot } from "@/features/reports/mock-reports";
+import { requireWhitelisted } from "@/features/auth/session";
+import { listPeriods } from "@/lib/db/periods";
 
-export default function AdminImportsPage() {
-  const snapshot = getImportWorkspaceSnapshot();
+export default async function AdminImportsPage() {
+  await requireWhitelisted();
+
+  const periods = await listPeriods();
 
   return (
     <AppShell>
@@ -15,11 +17,7 @@ export default function AdminImportsPage() {
         title="Capture raw uploads without collapsing field flexibility"
         description="Editors assign period metadata at upload time, inspect detected columns, and keep unmapped fields available as future candidates."
       />
-      <ImportWorkspace
-        sections={SECTION_OPTIONS}
-        cadences={CADENCE_OPTIONS}
-        suggestedMappings={snapshot.suggestedMappings}
-      />
+      <ImportWorkspace periods={periods} />
       <SurfaceCard eyebrow="Workflow rule" title="Import principles">
         <ul className="grid gap-3 text-sm leading-6 text-slate-300 lg:grid-cols-3">
           <li className="rounded-[1.25rem] border border-white/10 bg-white/5 px-4 py-4">
