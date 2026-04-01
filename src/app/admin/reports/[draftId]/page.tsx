@@ -2,9 +2,11 @@ import { notFound } from "next/navigation";
 import { AppShell } from "@/components/layout/app-shell";
 import { PageIntro } from "@/components/layout/page-intro";
 import { ReportBuilderWorkspace } from "@/components/reports/report-builder-workspace";
+import { ApprovalPanel } from "@/components/reports/approval-panel";
 import { requireWhitelisted } from "@/features/auth/session";
 import { getReportDraftWithWidgets } from "@/features/reports/actions";
 import { getSectionLabel } from "@/config/sections";
+import { listOutputVersions } from "@/lib/db/outputs";
 
 type Props = {
   params: Promise<{ draftId: string }>;
@@ -22,6 +24,7 @@ export default async function ReportDraftPage({ params }: Props) {
   }
 
   const sectionLabel = getSectionLabel(draft.section);
+  const outputVersions = await listOutputVersions(draft.periodId, draft.section);
 
   return (
     <AppShell>
@@ -33,6 +36,11 @@ export default async function ReportDraftPage({ params }: Props) {
       <ReportBuilderWorkspace
         initialDraft={draft}
         initialWidgets={draft.widgets}
+      />
+      <ApprovalPanel
+        draftId={draftId}
+        currentStatus={draft.status}
+        outputVersions={outputVersions}
       />
     </AppShell>
   );
