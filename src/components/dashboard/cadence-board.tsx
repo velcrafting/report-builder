@@ -23,11 +23,14 @@ type CadenceEntry = {
   }>;
 };
 
-type Snapshot = {
+export type DashboardSnapshot = {
   metrics: Array<{ label: string; value: string; detail: string }>;
   chart: Array<{ label: string; approved: number; review: number; draft: number }>;
   cadenceGroups: CadenceEntry[];
 };
+
+// Internal alias
+type Snapshot = DashboardSnapshot;
 
 type CadenceBoardProps = {
   snapshot: Snapshot;
