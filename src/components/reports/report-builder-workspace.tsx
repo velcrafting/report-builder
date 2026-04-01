@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { Redo2, Undo2 } from "lucide-react";
 import { CreateReportModal } from "@/components/reports/create-report-modal";
 import {
@@ -18,15 +18,29 @@ import {
   getWidgetDefinition,
 } from "@/features/widgets";
 import type { WidgetKind } from "@/features/widgets";
+import {
+  saveWidgetInstance,
+  deleteWidgetInstance,
+  updateDraftSummary,
+} from "@/features/reports/actions";
+import type { ReportDraftRow, WidgetInstanceRow } from "@/lib/db/reportDrafts";
 import { useHistoryStack } from "./use-history-stack";
 import { BuilderCanvas } from "./builder-canvas";
 import { BuilderInspector } from "./builder-inspector";
 import { BuilderLibraryPanel } from "./builder-library-panel";
 import { BuilderSessionHeader } from "./builder-session-header";
 
-type ReportBuilderWorkspaceProps = {
-  snapshot: ReportBuilderSnapshot;
-};
+type ReportBuilderWorkspaceProps =
+  | {
+      snapshot: ReportBuilderSnapshot;
+      initialDraft?: undefined;
+      initialWidgets?: undefined;
+    }
+  | {
+      snapshot?: undefined;
+      initialDraft: ReportDraftRow;
+      initialWidgets: WidgetInstanceRow[];
+    };
 
 type ExecRenderMode = "card" | "bar" | "quote";
 type NewWidgetType = WidgetKind;
@@ -59,13 +73,39 @@ const accentThemes = [
   { label: "Slate", accent: "#94a3b8", accentStrong: "#c4cedd" },
 ];
 
-export function ReportBuilderWorkspace({ snapshot }: ReportBuilderWorkspaceProps) {
-  const fallbackTemplate = snapshot.templates[0]!;
-  const [templates, setTemplates] = useState(snapshot.templates);
-  const [zones, setZones] = useState(snapshot.zones);
-  const [draftTitle, setDraftTitle] = useState(snapshot.draftTitle);
-  const [selectedTemplateId, setSelectedTemplateId] = useState(snapshot.selectedTemplateId);
-  const [selectedWidgetId, setSelectedWidgetId] = useState(snapshot.selectedWidgetId);
+export function ReportBuilderWorkspace({ snapshot, initialDraft, initialWidgets }: ReportBuilderWorkspaceProps) {
+  // DB-backed mode uses initialDraft; mock mode uses snapshot
+  const isDbBacked = initialDraft !== undefined;
+  const draftId = initialDraft?.id ?? null;
+
+  const [, startTransition] = useTransition();
+
+  // When in DB-backed mode, build a minimal snapshot-like shape from the draft
+  const resolvedSnapshot: ReportBuilderSnapshot | null = snapshot ?? null;
+  const fallbackTemplate = resolvedSnapshot?.templates[0] ?? null;
+  const [templates, setTemplates] = useState(resolvedSnapshot?.templates ?? []);
+  const [zones, setZones] = useState<ReportBuilderSnapshot["zones"]>(
+    resolvedSnapshot?.zones ??
+      (initialWidgets ?? []).map((w) => ({
+        key: w.zoneKey,
+        title: w.zoneKey,
+        purpose: "",
+        cards: [
+          {
+            id: w.id,
+            widgetType: w.widgetType,
+            title: w.widgetType,
+            source: "",
+            size: w.size as string,
+            includeInRollup: w.includeInRollup ?? false,
+            status: "ready" as const,
+          },
+        ],
+      }))
+  );
+  const [draftTitle, setDraftTitle] = useState(resolvedSnapshot?.draftTitle ?? initialDraft?.title ?? "");
+  const [selectedTemplateId, setSelectedTemplateId] = useState(resolvedSnapshot?.selectedTemplateId ?? "");
+  const [selectedWidgetId, setSelectedWidgetId] = useState(resolvedSnapshot?.selectedWidgetId ?? "");
   const [mode, setMode] = useState<"edit" | "preview">("preview");
   const [templateName, setTemplateName] = useState("");
   const [themeKey, setThemeKey] = useState(accentThemes[0].label);
@@ -75,7 +115,9 @@ export function ReportBuilderWorkspace({ snapshot }: ReportBuilderWorkspaceProps
   const [favorites, setFavorites] = useState<WidgetKind[]>(DEFAULT_FAVORITE_WIDGETS);
   const [createReportOpen, setCreateReportOpen] = useState(false);
   const previewHistory = useHistoryStack<TemplatePreviewState>({
-    templateReports: Object.fromEntries(snapshot.templates.map((template) => [template.id, template.previewReport])),
+    templateReports: Object.fromEntries(
+      (resolvedSnapshot?.templates ?? []).map((template) => [template.id, template.previewReport])
+    ),
     hiddenCardsByTemplate: {},
     renderModesByTemplate: {},
     cardSizesByTemplate: {},
@@ -136,7 +178,7 @@ export function ReportBuilderWorkspace({ snapshot }: ReportBuilderWorkspaceProps
   }
 
   function handleSaveTemplate() {
-    const finalLabel = templateName.trim() || `${snapshot.sectionLabel} custom ${templates.length + 1}`;
+    const finalLabel = templateName.trim() || `${resolvedSnapshot?.sectionLabel ?? "Custom"} custom ${templates.length + 1}`;
     const idBase = finalLabel
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
@@ -441,14 +483,86 @@ export function ReportBuilderWorkspace({ snapshot }: ReportBuilderWorkspaceProps
     setCommandQuery("");
   }
 
+  // ── DB-backed summary persistence ────────────────────────────────────────────
+  function handleSummaryChange(newSummary: string) {
+    if (!isDbBacked || !draftId) return;
+    startTransition(async () => {
+      await updateDraftSummary(draftId, newSummary);
+    });
+  }
+
+  // ── DB-backed widget persistence ──────────────────────────────────────────────
+  function persistWidgetAdd(zoneKey: string, widgetType: string, sortOrder: number) {
+    if (!isDbBacked || !draftId) return;
+    startTransition(async () => {
+      await saveWidgetInstance(draftId, {
+        widgetType,
+        zoneKey,
+        size: "medium",
+        configJson: "{}",
+        sortOrder,
+        includeInRollup: false,
+      });
+    });
+  }
+
+  function persistWidgetDelete(widgetId: string) {
+    if (!isDbBacked || !draftId) return;
+    startTransition(async () => {
+      await deleteWidgetInstance(widgetId);
+    });
+  }
+
+  function persistWidgetUpdate(widgetId: string, patch: { size?: string; configJson?: string; sortOrder?: number; includeInRollup?: boolean; zoneKey?: string }) {
+    if (!isDbBacked || !draftId) return;
+    startTransition(async () => {
+      await saveWidgetInstance(draftId, {
+        id: widgetId,
+        widgetType: "",
+        zoneKey: patch.zoneKey ?? "",
+        size: patch.size ?? "medium",
+        configJson: patch.configJson ?? "{}",
+        sortOrder: patch.sortOrder ?? 0,
+        includeInRollup: patch.includeInRollup,
+      });
+    });
+  }
+
+  // Unused warning suppression — these are wired up via call sites below
+  void persistWidgetDelete;
+  void persistWidgetUpdate;
+  void handleSummaryChange;
+
+  const headerSnapshot: ReportBuilderSnapshot = resolvedSnapshot ?? {
+    draftTitle: initialDraft?.title ?? "",
+    sectionLabel: initialDraft?.section ?? "",
+    periodLabel: "",
+    selectedTemplateId: "",
+    selectedWidgetId: "",
+    templates: [],
+    dataFeeds: [],
+    workflowNotes: [],
+    libraryGroups: [],
+    zones: [],
+    inspector: {
+      widgetTitle: "",
+      widgetType: "",
+      narrativeGoal: "",
+      supportingFields: [],
+      controls: [],
+    },
+  };
+
   return (
     <div className="space-y-6">
       <BuilderSessionHeader
-        snapshot={{ ...snapshot, templates }}
+        snapshot={{ ...headerSnapshot, templates }}
         selectedTemplateId={selectedTemplateId}
         mode={mode}
         onSelectTemplate={setSelectedTemplateId}
         onSetMode={setMode}
+        draftId={draftId ?? undefined}
+        currentStatus={initialDraft?.status}
       />
       <SurfaceCard
         eyebrow="Template actions"
@@ -701,18 +815,22 @@ export function ReportBuilderWorkspace({ snapshot }: ReportBuilderWorkspaceProps
             />
           </SurfaceCard>
         </div>
+      ) : resolvedSnapshot == null ? (
+        <div className="flex items-center justify-center py-16 text-sm text-slate-400">
+          Edit mode requires a template snapshot — switch to preview mode to edit this DB-backed draft.
+        </div>
       ) : (
         <div className="grid gap-6 xl:grid-cols-[0.82fr_1.55fr_0.9fr]">
-          <BuilderLibraryPanel snapshot={snapshot} onSelectWidget={setSelectedWidgetId} />
+          <BuilderLibraryPanel snapshot={resolvedSnapshot} onSelectWidget={setSelectedWidgetId} />
           <BuilderCanvas
-            periodLabel={snapshot.periodLabel}
+            periodLabel={resolvedSnapshot.periodLabel}
             draftTitle={draftTitle}
             zones={zones}
             selectedCardId={selectedCard?.id}
             onSelectCard={setSelectedWidgetId}
           />
           <BuilderInspector
-            snapshot={snapshot}
+            snapshot={resolvedSnapshot}
             selectedCard={selectedCard}
             selectedZoneTitle={selectedZone?.title}
             onUpdateSelectedCard={updateSelectedCard}

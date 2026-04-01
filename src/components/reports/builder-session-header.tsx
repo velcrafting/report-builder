@@ -1,6 +1,20 @@
-import { Eye, FileStack, LayoutTemplate, WandSparkles } from "lucide-react";
+"use client";
+
+import { useTransition } from "react";
+import { Eye, FileStack, LayoutTemplate, WandSparkles, Send } from "lucide-react";
 import { SurfaceCard } from "@/components/ui/surface-card";
 import type { ReportBuilderSnapshot } from "@/features/reports/types";
+import { updateDraftStatus } from "@/features/reports/actions";
+
+const STATUS_LABELS: Record<string, string> = {
+  draft: "Draft",
+  in_review: "In Review",
+};
+
+const STATUS_COLORS: Record<string, string> = {
+  draft: "text-slate-400 border-white/10 bg-white/5",
+  in_review: "text-amber-300 border-amber-400/30 bg-amber-400/10",
+};
 
 type BuilderSessionHeaderProps = {
   snapshot: ReportBuilderSnapshot;
@@ -8,6 +22,9 @@ type BuilderSessionHeaderProps = {
   mode: "edit" | "preview";
   onSelectTemplate: (id: string) => void;
   onSetMode: (mode: "edit" | "preview") => void;
+  /** Present when builder is DB-backed */
+  draftId?: string;
+  currentStatus?: string;
 };
 
 export function BuilderSessionHeader({
@@ -16,12 +33,47 @@ export function BuilderSessionHeader({
   mode,
   onSelectTemplate,
   onSetMode,
+  draftId,
+  currentStatus,
 }: BuilderSessionHeaderProps) {
+  const [isPending, startTransition] = useTransition();
+
+  function handleSubmitForReview() {
+    if (!draftId) return;
+    startTransition(async () => {
+      await updateDraftStatus(draftId, "in_review");
+    });
+  }
   const selectedTemplate =
     snapshot.templates.find((template) => template.id === selectedTemplateId) ?? snapshot.templates[0];
 
   return (
-    <SurfaceCard eyebrow="Editor session" title="Draft builder controls">
+    <SurfaceCard
+      eyebrow="Editor session"
+      title="Draft builder controls"
+      actions={
+        draftId ? (
+          <div className="flex items-center gap-3">
+            {currentStatus && (
+              <span className={`rounded-full border px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.14em] ${STATUS_COLORS[currentStatus] ?? STATUS_COLORS.draft}`}>
+                {STATUS_LABELS[currentStatus] ?? currentStatus}
+              </span>
+            )}
+            {currentStatus !== "in_review" && (
+              <button
+                type="button"
+                onClick={handleSubmitForReview}
+                disabled={isPending}
+                className="inline-flex h-9 items-center gap-1.5 rounded-full border border-amber-400/40 bg-amber-400/10 px-3 text-xs font-semibold uppercase tracking-[0.16em] text-amber-300 transition hover:bg-amber-400/20 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <Send className="h-3.5 w-3.5" />
+                Submit for Review
+              </button>
+            )}
+          </div>
+        ) : null
+      }
+    >
       <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
         <div className="space-y-4">
           <div className="flex flex-wrap gap-2">
