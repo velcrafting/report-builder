@@ -17,3 +17,4 @@ export * from "./annotations";
 export * from "./rollups";
 // Note: shareLinks.ts is a standalone module imported directly (not barrel-exported)
 // to avoid conflicts with ShareLinkRow in outputs.ts.
+export * from "./auditLog";

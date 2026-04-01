@@ -273,3 +273,13 @@ model RollupVersion {
   createdByUser    User         @relation("RollupCreator", fields: [createdByUserId], references: [id])
   approvedByUser   User?        @relation("RollupApprover", fields: [approvedByUserId], references: [id])
 }
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  action     String   // e.g. "draft.status_changed", "output.approved", "share_link.created"
+  entityType String   // e.g. "ReportDraft", "OutputVersion", "ShareLink"
+  entityId   String
+  actorId    String?  // userId, null if system
+  meta       String   @default("{}")  // JSON string with extra context
+  createdAt  DateTime @default(now())
+}

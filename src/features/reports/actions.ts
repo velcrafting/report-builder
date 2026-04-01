@@ -15,6 +15,7 @@ import {
   type WidgetInstanceRow,
 } from "@/lib/db/reportDrafts";
 import { requireWhitelisted } from "@/features/auth/session";
+import { logAuditEvent } from "@/lib/db/auditLog";
 
 // ── Draft Actions ─────────────────────────────────────────────────────────────
 
@@ -68,7 +69,9 @@ export async function updateDraftStatus(
   status: "draft" | "in_review"
 ): Promise<ReportDraftSummary> {
   await requireWhitelisted();
-  return setReportDraftStatus(draftId, status as DraftState);
+  const result = await setReportDraftStatus(draftId, status as DraftState);
+  logAuditEvent({ action: "draft.status_changed", entityType: "ReportDraft", entityId: draftId, meta: { status } }).catch(() => {});
+  return result;
 }
 
 export async function updateDraftSummary(

@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { FileText } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
 import { PageIntro } from "@/components/layout/page-intro";
 import { SurfaceCard } from "@/components/ui/surface-card";
+import { EmptyState } from "@/components/ui/empty-state";
 import { NewReportForm } from "@/components/reports/new-report-form";
 import { requireWhitelisted } from "@/features/auth/session";
 import { listPeriods } from "@/lib/db/periods";
@@ -54,9 +56,11 @@ export default async function AdminReportsPage() {
 
       <SurfaceCard eyebrow="All drafts" title="Existing report drafts">
         {allDrafts.length === 0 ? (
-          <p className="text-sm text-slate-400">
-            No report drafts yet. Create one above to get started.
-          </p>
+          <EmptyState
+            icon={FileText}
+            title="No report drafts yet"
+            description="Create a new draft above to get started."
+          />
         ) : (
           <div className="space-y-2">
             {allDrafts.map((draft) => (

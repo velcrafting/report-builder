@@ -1,14 +1,26 @@
 import Link from "next/link";
-import { BarChart3, FileStack, Home, Link2, PanelsTopLeft, Shapes, Upload } from "lucide-react";
+import {
+  BarChart3,
+  FileText,
+  LayersIcon,
+  LayoutDashboard,
+  Link2,
+  ScrollText,
+  Settings,
+  Shapes,
+  Upload,
+} from "lucide-react";
 
 const navGroups = [
   {
     label: "Workspace",
     items: [
-      { href: "/admin", label: "Control Room", icon: Home },
-      { href: "/admin/imports", label: "Imports", icon: Upload },
-      { href: "/admin/reports", label: "Reports", icon: PanelsTopLeft },
-      { href: "/admin/outputs", label: "Outputs", icon: FileStack },
+      { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+      { href: "/admin/imports", label: "Data Imports", icon: Upload },
+      { href: "/admin/reports", label: "Report Drafts", icon: FileText },
+      { href: "/admin/rollup", label: "Roll-up Composer", icon: LayersIcon },
+      { href: "/admin/settings", label: "Settings", icon: Settings },
+      { href: "/admin/audit", label: "Audit Log", icon: ScrollText },
     ],
   },
   {

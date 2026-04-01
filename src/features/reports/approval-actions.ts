@@ -9,6 +9,7 @@ import {
   listOutputVersions,
   type OutputVersionSummary,
 } from "@/lib/db/outputs";
+import { logAuditEvent } from "@/lib/db/auditLog";
 
 export type { OutputVersionSummary };
 
@@ -42,6 +43,7 @@ export async function approveDraftAction(
   });
 
   await approveOutput(newVersion.id, session.user.id);
+  logAuditEvent({ action: "output.approved", entityType: "OutputVersion", entityId: newVersion.id, actorId: session.user.id, meta: { draftId } }).catch(() => {});
 
   return { outputVersionId: newVersion.id };
 }

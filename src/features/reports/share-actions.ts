@@ -7,13 +7,16 @@ import {
   deleteShareLink,
   type ShareLinkRow,
 } from "@/lib/db/shareLinks";
+import { logAuditEvent } from "@/lib/db/auditLog";
 
 export async function createShareLinkAction(
   outputVersionId: string,
   label?: string
 ): Promise<ShareLinkRow> {
   await requireWhitelisted();
-  return createShareLink({ outputVersionId, label });
+  const link = await createShareLink({ outputVersionId, label });
+  logAuditEvent({ action: "share_link.created", entityType: "ShareLink", entityId: link.id, meta: { outputVersionId } }).catch(() => {});
+  return link;
 }
 
 export async function listShareLinksAction(
