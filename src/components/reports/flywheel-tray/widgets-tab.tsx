@@ -14,9 +14,10 @@ type DraggableWidgetKindProps = {
   kind: WidgetKind;
   label: string;
   layer: string;
+  onAddBlank: (kind: WidgetKind) => void;
 };
 
-function DraggableWidgetKind({ kind, label, layer }: DraggableWidgetKindProps) {
+function DraggableWidgetKind({ kind, label, layer, onAddBlank }: DraggableWidgetKindProps) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: `widget-kind-${kind}`,
     data: {
@@ -36,6 +37,9 @@ function DraggableWidgetKind({ kind, label, layer }: DraggableWidgetKindProps) {
       style={style}
       {...attributes}
       {...listeners}
+      onClick={() => {
+        if (!isDragging) onAddBlank(kind);
+      }}
       className="cursor-grab rounded-[0.85rem] border border-white/10 bg-slate-950/60 px-3 py-2.5 active:cursor-grabbing"
     >
       <p className="text-[0.65rem] uppercase tracking-[0.14em] text-white/35">{layer}</p>
@@ -53,6 +57,7 @@ export function WidgetsTab({ onAddBlank }: WidgetsTabProps) {
           kind={def.kind}
           label={def.label}
           layer={def.layer}
+          onAddBlank={onAddBlank}
         />
       ))}
     </div>
