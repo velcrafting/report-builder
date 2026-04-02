@@ -266,7 +266,7 @@ git commit -m "feat: add getFieldSuggestionsForSection server action"
 **Files:**
 - Modify: `src/features/reports/actions.ts`
 
-- [ ] **Step 1: Add `bulkUpdateWidgetPositions` to the bottom of `actions.ts`**
+- [x] ✅ **Step 1: Add `bulkUpdateWidgetPositions` to the bottom of `actions.ts`**
 
 Open `src/features/reports/actions.ts` and append:
 
@@ -315,7 +315,7 @@ import {
 
 If `updateWidget` is not already imported, add it.
 
-- [ ] **Step 2: Verify TypeScript compiles**
+- [x] ✅ **Step 2: Verify TypeScript compiles**
 
 ```bash
 cd /Users/steven/Desktop/Coding/Ledger-Reporting && npx tsc --noEmit 2>&1 | tail -5
@@ -323,7 +323,7 @@ cd /Users/steven/Desktop/Coding/Ledger-Reporting && npx tsc --noEmit 2>&1 | tail
 
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] ✅ **Step 3: Commit**
 
 ```bash
 git add src/features/reports/actions.ts
@@ -337,7 +337,7 @@ git commit -m "feat: add bulkUpdateWidgetPositions server action"
 **Files:**
 - Create: `src/components/reports/flywheel-tray/data-fields-tab.tsx`
 
-- [ ] **Step 1: Create the file**
+- [x] ✅ **Step 1: Create the file**
 
 ```typescript
 // src/components/reports/flywheel-tray/data-fields-tab.tsx
@@ -416,7 +416,7 @@ export function DataFieldsTab({ fields, section }: DataFieldsTabProps) {
 }
 ```
 
-- [ ] **Step 2: Verify TypeScript compiles**
+- [x] ✅ **Step 2: Verify TypeScript compiles**
 
 ```bash
 cd /Users/steven/Desktop/Coding/Ledger-Reporting && npx tsc --noEmit 2>&1 | grep "data-fields"
@@ -424,7 +424,7 @@ cd /Users/steven/Desktop/Coding/Ledger-Reporting && npx tsc --noEmit 2>&1 | grep
 
 Expected: no output.
 
-- [ ] **Step 3: Commit**
+- [x] ✅ **Step 3: Commit**
 
 ```bash
 git add src/components/reports/flywheel-tray/data-fields-tab.tsx
