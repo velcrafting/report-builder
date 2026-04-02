@@ -2,6 +2,16 @@
 
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { Redo2, Undo2 } from "lucide-react";
+import {
+  DndContext,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+  type DragOverEvent,
+  type DragStartEvent,
+} from "@dnd-kit/core";
+import { arrayMove } from "@dnd-kit/sortable";
 import { CreateReportModal } from "@/components/reports/create-report-modal";
 import {
   ExecutiveCommandPalette,
@@ -22,6 +32,8 @@ import {
   saveWidgetInstance,
   deleteWidgetInstance,
   updateDraftSummary,
+  bulkUpdateWidgetPositions,
+  type WidgetPositionUpdate,
 } from "@/features/reports/actions";
 import type { ReportDraftRow, WidgetInstanceRow } from "@/lib/db/reportDrafts";
 import { useHistoryStack } from "./use-history-stack";
@@ -29,6 +41,9 @@ import { BuilderCanvas } from "./builder-canvas";
 import { BuilderInspector } from "./builder-inspector";
 import { BuilderLibraryPanel } from "./builder-library-panel";
 import { BuilderSessionHeader } from "./builder-session-header";
+import { FlywheelTray } from "./flywheel-tray/flywheel-tray";
+import { getFieldSuggestionsForSection } from "@/features/imports/field-suggestions-action";
+import type { FieldSuggestion } from "@/features/imports/field-suggestions-action";
 
 type ReportBuilderWorkspaceProps =
   | {
@@ -114,6 +129,15 @@ export function ReportBuilderWorkspace({ snapshot, initialDraft, initialWidgets 
   const [commandQuery, setCommandQuery] = useState("");
   const [favorites, setFavorites] = useState<WidgetKind[]>(DEFAULT_FAVORITE_WIDGETS);
   const [createReportOpen, setCreateReportOpen] = useState(false);
+  const [fieldSuggestions, setFieldSuggestions] = useState<FieldSuggestion[]>([]);
+  const [activeDragId, setActiveDragId] = useState<string | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
+  );
+
+  const draftSection = initialDraft?.section ?? "";
+
   const previewHistory = useHistoryStack<TemplatePreviewState>({
     templateReports: Object.fromEntries(
       (resolvedSnapshot?.templates ?? []).map((template) => [template.id, template.previewReport])
@@ -153,8 +177,13 @@ export function ReportBuilderWorkspace({ snapshot, initialDraft, initialWidgets 
     document.documentElement.style.setProperty("--accent-strong", selectedTheme.accentStrong);
   }, [selectedTheme]);
 
+  useEffect(() => {
+    if (!draftSection) return;
+    getFieldSuggestionsForSection(draftSection).then(setFieldSuggestions).catch(() => {});
+  }, [draftSection]);
+
   const previewState = previewHistory.state;
-  const activePreviewReport = previewState.templateReports[selectedTemplateId] ?? selectedTemplate.previewReport;
+  const activePreviewReport = previewState.templateReports[selectedTemplateId] ?? selectedTemplate?.previewReport;
   const hiddenCardIds = previewState.hiddenCardsByTemplate[selectedTemplateId] ?? [];
   const renderModes = previewState.renderModesByTemplate[selectedTemplateId] ?? {};
   const cardSizes = previewState.cardSizesByTemplate[selectedTemplateId] ?? {};
@@ -457,6 +486,94 @@ export function ReportBuilderWorkspace({ snapshot, initialDraft, initialWidgets 
     [previewHistory.canRedo, previewHistory.canUndo],
   );
 
+  // ── DnD handlers ─────────────────────────────────────────────────────────────
+  function handleDragStart(event: DragStartEvent) {
+    setActiveDragId(String(event.active.id));
+  }
+
+  function handleDragOver(_event: DragOverEvent) {
+    // Visual feedback is handled internally by each droppable's own isOver state
+  }
+
+  function handleDragEnd(event: DragEndEvent) {
+    setActiveDragId(null);
+
+    const { active, over } = event;
+    if (!over || !draftId) return;
+
+    const activeId = String(active.id);
+    const overId = String(over.id);
+
+    // Skip if this is a tray item drop (handled in Task 11)
+    const dragData = active.data.current;
+    if (dragData?.type === "field" || dragData?.type === "widget-kind") return;
+
+    // Find source zone (zone containing the dragged card)
+    const sourceZone = zones.find((z) => z.cards.some((c) => c.id === activeId));
+    if (!sourceZone) return;
+
+    // Determine target zone from the overId
+    let targetZoneKey: string | null = null;
+    if (overId.startsWith("zone-")) {
+      targetZoneKey = overId.replace("zone-", "");
+    } else if (overId.startsWith("between-")) {
+      // between targets: "between-{zoneKey}-and-{nextKey}" or "between-start-and-{zoneKey}"
+      // Drop onto a between target → move to the zone after the between strip
+      const parts = overId.split("-and-");
+      const afterKey = parts[1];
+      targetZoneKey = afterKey !== "end" ? afterKey : zones[zones.length - 1]?.key ?? null;
+    } else {
+      // overId is a card id — find its zone
+      const targetByCard = zones.find((z) => z.cards.some((c) => c.id === overId));
+      targetZoneKey = targetByCard?.key ?? null;
+    }
+
+    if (!targetZoneKey) return;
+
+    const targetZone = zones.find((z) => z.key === targetZoneKey);
+    if (!targetZone) return;
+
+    if (sourceZone.key === targetZone.key) {
+      // Reorder within zone
+      const oldIndex = sourceZone.cards.findIndex((c) => c.id === activeId);
+      const newIndex = sourceZone.cards.findIndex((c) => c.id === overId);
+      if (oldIndex === -1 || newIndex === -1 || oldIndex === newIndex) return;
+
+      const reordered = arrayMove(sourceZone.cards, oldIndex, newIndex);
+      setZones((prev) =>
+        prev.map((z) => (z.key === sourceZone.key ? { ...z, cards: reordered } : z))
+      );
+
+      const updates: WidgetPositionUpdate[] = reordered.map((card, idx) => ({
+        id: card.id,
+        zoneKey: sourceZone.key,
+        sortOrder: idx,
+      }));
+      bulkUpdateWidgetPositions(draftId, updates).catch(console.error);
+    } else {
+      // Move card to a different zone
+      const movingCard = sourceZone.cards.find((c) => c.id === activeId);
+      if (!movingCard) return;
+
+      const newSourceCards = sourceZone.cards.filter((c) => c.id !== activeId);
+      const newTargetCards = [...targetZone.cards, movingCard];
+
+      setZones((prev) =>
+        prev.map((z) => {
+          if (z.key === sourceZone.key) return { ...z, cards: newSourceCards };
+          if (z.key === targetZone.key) return { ...z, cards: newTargetCards };
+          return z;
+        })
+      );
+
+      const updates: WidgetPositionUpdate[] = [
+        ...newSourceCards.map((c, i) => ({ id: c.id, zoneKey: sourceZone.key, sortOrder: i })),
+        ...newTargetCards.map((c, i) => ({ id: c.id, zoneKey: targetZone.key, sortOrder: i })),
+      ];
+      bulkUpdateWidgetPositions(draftId, updates).catch(console.error);
+    }
+  }
+
   function handleCommandSelect(action: ExecutiveCommandPaletteAction) {
     if (action.disabled) return;
 
@@ -659,9 +776,9 @@ export function ReportBuilderWorkspace({ snapshot, initialDraft, initialWidgets 
         {saveNotice ? <p className="mt-3 text-sm text-[var(--accent)]">{saveNotice}</p> : null}
       </SurfaceCard>
 
-      {mode === "preview" ? (
+      {mode === "preview" && selectedTemplate ? (
         <div className="space-y-5">
-          <SurfaceCard eyebrow="Template preview" title={`${selectedTemplate.label} executive artifact`}>
+          <SurfaceCard eyebrow="Template preview" title={`${selectedTemplate?.label ?? "Report"} executive artifact`}>
             {hiddenCardIds.length ? (
               <div className="mb-4 flex items-center justify-between gap-3 rounded-[1rem] border border-white/10 bg-slate-950/55 px-4 py-3">
                 <p className="text-sm text-slate-300">
@@ -822,18 +939,44 @@ export function ReportBuilderWorkspace({ snapshot, initialDraft, initialWidgets 
       ) : (
         <div className="grid gap-6 xl:grid-cols-[0.82fr_1.55fr_0.9fr]">
           <BuilderLibraryPanel snapshot={resolvedSnapshot} onSelectWidget={setSelectedWidgetId} />
-          <BuilderCanvas
-            periodLabel={resolvedSnapshot.periodLabel}
-            draftTitle={draftTitle}
-            zones={zones}
-            selectedCardId={selectedCard?.id}
-            onSelectCard={setSelectedWidgetId}
-          />
+          <DndContext
+            sensors={sensors}
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDragEnd={handleDragEnd}
+          >
+            <BuilderCanvas
+              periodLabel={resolvedSnapshot.periodLabel}
+              draftTitle={draftTitle}
+              zones={zones}
+              selectedCardId={selectedCard?.id}
+              onSelectCard={setSelectedWidgetId}
+            />
+          </DndContext>
           <BuilderInspector
             snapshot={resolvedSnapshot}
             selectedCard={selectedCard}
             selectedZoneTitle={selectedZone?.title}
             onUpdateSelectedCard={updateSelectedCard}
+            storyBlocks={activePreviewReport?.storyBlocks}
+            onEditStoryBlock={(blockKey, patch) =>
+              updatePreviewState((current) => {
+                const report = current.templateReports[selectedTemplateId] ?? selectedTemplate?.previewReport;
+                if (!report) return current;
+                return {
+                  ...current,
+                  templateReports: {
+                    ...current.templateReports,
+                    [selectedTemplateId]: {
+                      ...report,
+                      storyBlocks: report.storyBlocks.map((block) =>
+                        block.key === blockKey ? { ...block, ...patch } : block,
+                      ),
+                    },
+                  },
+                };
+              })
+            }
           />
         </div>
       )}
@@ -851,6 +994,17 @@ export function ReportBuilderWorkspace({ snapshot, initialDraft, initialWidgets 
         title="Executive Builder Commands"
         subtitle="Fast actions for preview-first editing"
         keyboardHintText="Cmd/Ctrl+K to open"
+      />
+
+      <FlywheelTray
+        section={draftSection}
+        fields={fieldSuggestions}
+        onAddBlankWidget={(kind) => {
+          // TODO: wire in Task 11 — no suitable zone-targeted add-widget handler exists yet
+        }}
+        onApplyPreset={(presetId) => {
+          // TODO: wire in Task 11 — no suitable apply-preset handler exists yet
+        }}
       />
 
       <CreateReportModal
