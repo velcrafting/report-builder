@@ -36,7 +36,7 @@
 **Files:**
 - Modify: `package.json`
 
-- [ ] **Step 1: Install packages**
+- [x] **Step 1: Install packages** ✅
 
 ```bash
 cd /Users/steven/Desktop/Coding/Ledger-Reporting
@@ -45,7 +45,7 @@ npm install @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities
 
 Expected output: 3 packages added, no peer-dep warnings.
 
-- [ ] **Step 2: Verify TypeScript types are available**
+- [x] **Step 2: Verify TypeScript types are available** ✅
 
 ```bash
 npx tsc --noEmit 2>&1 | head -20
@@ -53,7 +53,7 @@ npx tsc --noEmit 2>&1 | head -20
 
 Expected: no new errors related to dnd-kit.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit** ✅
 
 ```bash
 git add package.json package-lock.json
@@ -67,7 +67,7 @@ git commit -m "chore: install @dnd-kit/core, sortable, utilities"
 **Files:**
 - Create: `src/features/widgets/suggest.ts`
 
-- [ ] **Step 1: Create the file**
+- [x] ✅ **Step 1: Create the file**
 
 ```typescript
 // src/features/widgets/suggest.ts
@@ -171,7 +171,7 @@ export function suggestWidgetLabel(
 }
 ```
 
-- [ ] **Step 2: Verify TypeScript compiles**
+- [x] ✅ **Step 2: Verify TypeScript compiles**
 
 ```bash
 cd /Users/steven/Desktop/Coding/Ledger-Reporting && npx tsc --noEmit 2>&1 | grep "suggest"
@@ -179,7 +179,7 @@ cd /Users/steven/Desktop/Coding/Ledger-Reporting && npx tsc --noEmit 2>&1 | grep
 
 Expected: no output (no errors).
 
-- [ ] **Step 3: Commit**
+- [x] ✅ **Step 3: Commit**
 
 ```bash
 git add src/features/widgets/suggest.ts
