@@ -193,7 +193,7 @@ git commit -m "feat: add suggestWidgetKind utility for flywheel tray"
 **Files:**
 - Create: `src/features/imports/field-suggestions-action.ts`
 
-- [ ] **Step 1: Create the file**
+- [x] ✅ **Step 1: Create the file**
 
 ```typescript
 // src/features/imports/field-suggestions-action.ts
@@ -244,7 +244,7 @@ export async function getFieldSuggestionsForSection(
 }
 ```
 
-- [ ] **Step 2: Verify TypeScript compiles**
+- [x] ✅ **Step 2: Verify TypeScript compiles**
 
 ```bash
 cd /Users/steven/Desktop/Coding/Ledger-Reporting && npx tsc --noEmit 2>&1 | grep "field-suggestions"
@@ -252,7 +252,7 @@ cd /Users/steven/Desktop/Coding/Ledger-Reporting && npx tsc --noEmit 2>&1 | grep
 
 Expected: no output.
 
-- [ ] **Step 3: Commit**
+- [x] ✅ **Step 3: Commit**
 
 ```bash
 git add src/features/imports/field-suggestions-action.ts
