@@ -16,11 +16,10 @@ import type { ReportBuilderSnapshot } from "@/features/reports/types";
 
 type BetweenZoneDropProps = {
   id: string;
-  isOver: boolean;
 };
 
-function BetweenZoneDrop({ id, isOver }: BetweenZoneDropProps) {
-  const { setNodeRef } = useDroppable({ id });
+function BetweenZoneDrop({ id }: BetweenZoneDropProps) {
+  const { setNodeRef, isOver } = useDroppable({ id });
   return (
     <div
       ref={setNodeRef}
@@ -63,14 +62,16 @@ function SortableCard({ card, isSelected, onSelect }: SortableCardProps) {
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
             {/* Drag handle */}
-            <div
+            <button
+              type="button"
+              aria-label="Drag to reorder"
               {...attributes}
               {...listeners}
               className="cursor-grab rounded-xl border border-white/10 bg-slate-950/45 p-2.5 active:cursor-grabbing"
               onClick={(e) => e.stopPropagation()}
             >
               <Grip className="h-4 w-4 text-white/50" />
-            </div>
+            </button>
             <div>
               <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white/40">
                 {card.widgetType}
@@ -102,10 +103,9 @@ type DroppableZoneProps = {
   zone: ReportBuilderSnapshot["zones"][number];
   selectedCardId?: string;
   onSelectCard: (id: string) => void;
-  overZoneId: string | null;
 };
 
-function DroppableZone({ zone, selectedCardId, onSelectCard, overZoneId }: DroppableZoneProps) {
+function DroppableZone({ zone, selectedCardId, onSelectCard }: DroppableZoneProps) {
   const { setNodeRef, isOver } = useDroppable({ id: `zone-${zone.key}` });
   const cardIds = zone.cards.map((c) => c.id);
 
@@ -151,7 +151,6 @@ type BuilderCanvasProps = {
   periodLabel: string;
   zones: ReportBuilderSnapshot["zones"];
   selectedCardId?: string;
-  overZoneId: string | null;
   onSelectCard: (id: string) => void;
 };
 
@@ -160,7 +159,6 @@ export function BuilderCanvas({
   periodLabel,
   zones,
   selectedCardId,
-  overZoneId,
   onSelectCard,
 }: BuilderCanvasProps) {
   return (
@@ -171,7 +169,6 @@ export function BuilderCanvas({
             {index === 0 && (
               <BetweenZoneDrop
                 id={`between-start-and-${zone.key}`}
-                isOver={overZoneId === `between-start-and-${zone.key}`}
               />
             )}
 
@@ -179,15 +176,10 @@ export function BuilderCanvas({
               zone={zone}
               selectedCardId={selectedCardId}
               onSelectCard={onSelectCard}
-              overZoneId={overZoneId}
             />
 
             <BetweenZoneDrop
               id={`between-${zone.key}-and-${zones[index + 1]?.key ?? "end"}`}
-              isOver={
-                overZoneId ===
-                `between-${zone.key}-and-${zones[index + 1]?.key ?? "end"}`
-              }
             />
           </div>
         ))}
