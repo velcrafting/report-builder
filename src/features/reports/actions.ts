@@ -125,3 +125,33 @@ export async function deleteWidgetInstance(widgetId: string): Promise<void> {
   await requireWhitelisted();
   return removeWidget(widgetId);
 }
+
+export type WidgetPositionUpdate = {
+  id: string;
+  zoneKey: string;
+  sortOrder: number;
+};
+
+/**
+ * Bulk-update zoneKey and sortOrder for multiple widgets.
+ * Called after a drag-and-drop operation resolves on the canvas.
+ */
+export async function bulkUpdateWidgetPositions(
+  draftId: string,
+  updates: WidgetPositionUpdate[]
+): Promise<void> {
+  await requireWhitelisted();
+
+  await Promise.all(
+    updates.map((u) =>
+      updateWidget(u.id, { zoneKey: u.zoneKey, sortOrder: u.sortOrder })
+    )
+  );
+
+  logAuditEvent({
+    action: "draft.widgets_reordered",
+    entityType: "ReportDraft",
+    entityId: draftId,
+    meta: { count: updates.length },
+  }).catch(() => {});
+}
