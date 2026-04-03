@@ -7,6 +7,7 @@ import { SurfaceCard } from "@/components/ui/surface-card";
 import { UploadStep } from "./upload-step";
 import { PeriodForm } from "./period-form";
 import { ColumnMapper } from "./column-mapper";
+import { DownloadTemplateButton } from "./download-template-button";
 import {
   uploadCSV,
   saveImportBatch,
@@ -205,6 +206,12 @@ export function ImportWorkspace({ periods: initialPeriods }: ImportWorkspaceProp
       {step === 1 && (
         <FadeIn>
           <SurfaceCard eyebrow="Step 1" title="Upload CSV">
+            <div className="mb-5 flex items-center justify-between">
+              <p className="text-sm text-slate-400">
+                Not sure of the column format? Download the template first.
+              </p>
+              <DownloadTemplateButton />
+            </div>
             <UploadStep onSubmit={handleUpload} loading={loading} />
           </SurfaceCard>
         </FadeIn>

@@ -152,3 +152,30 @@ export async function setUserWhitelisted(
     },
   });
 }
+
+export type CreateUserInput = {
+  email: string;
+  role: UserRole;
+};
+
+export async function createUser(data: CreateUserInput): Promise<UserSummary> {
+  return prisma.user.create({
+    data: {
+      email: data.email,
+      role: data.role,
+      isWhitelisted: false,
+    },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      role: true,
+      isWhitelisted: true,
+      createdAt: true,
+    },
+  });
+}
+
+export async function deleteUser(id: string): Promise<void> {
+  await prisma.user.delete({ where: { id } });
+}

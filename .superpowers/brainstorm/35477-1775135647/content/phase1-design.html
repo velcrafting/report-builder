@@ -1,0 +1,108 @@
+<h2>Phase 1 — Canva Builder Design</h2>
+<p class="subtitle">Incremental evolution of the existing report workspace</p>
+
+<div class="section">
+  <h3>The + Flywheel Tray</h3>
+  <div class="mockup">
+    <div class="mockup-header">Builder Canvas — tray open</div>
+    <div class="mockup-body" style="display:flex;gap:0;min-height:340px;padding:0;overflow:hidden">
+      <!-- Canvas -->
+      <div style="flex:1;padding:16px;background:#0a1020;overflow-y:auto">
+        <div style="color:#475569;font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Report Canvas</div>
+
+        <!-- Block 1 -->
+        <div style="background:#1e293b;border-radius:8px;padding:12px;margin-bottom:10px">
+          <div style="color:#94a3b8;font-size:9px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Academy</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+            <div style="background:#0f172a;border-radius:6px;padding:10px;font-size:10px;color:#e2e8f0">📊 Enrollments KPI</div>
+            <div style="background:#0f172a;border-radius:6px;padding:10px;font-size:10px;color:#e2e8f0">📈 Completion Rate</div>
+          </div>
+          <div style="background:#0f172a;border-radius:6px;padding:10px;font-size:10px;color:#e2e8f0">📋 Course × Completions Chart</div>
+        </div>
+
+        <!-- Block 2 with drag target highlight -->
+        <div style="background:#1e293b;border-radius:8px;padding:12px;margin-bottom:10px">
+          <div style="color:#94a3b8;font-size:9px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Blog</div>
+          <div style="background:#0f172a;border-radius:6px;padding:10px;font-size:10px;color:#e2e8f0;margin-bottom:6px">📊 Posts Published KPI</div>
+          <div style="background:#334155;border:2px dashed #f28d49;border-radius:6px;padding:10px;font-size:10px;color:#f28d49;text-align:center">Drop here →</div>
+        </div>
+
+        <!-- Between blocks drop zone -->
+        <div style="border:2px dashed #334155;border-radius:6px;padding:8px;font-size:9px;color:#475569;text-align:center;margin-bottom:10px">Drop between blocks to create new section</div>
+
+        <!-- Block 3 -->
+        <div style="background:#1e293b;border-radius:8px;padding:12px">
+          <div style="color:#94a3b8;font-size:9px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">GEO</div>
+          <div style="background:#0f172a;border-radius:6px;padding:10px;font-size:10px;color:#e2e8f0">💬 Narrative Block</div>
+        </div>
+      </div>
+
+      <!-- Flywheel Tray (right side, slides up from bottom) -->
+      <div style="width:220px;background:#131e2e;border-left:1px solid #1e293b;display:flex;flex-direction:column">
+        <!-- Tab bar -->
+        <div style="display:flex;border-bottom:1px solid #1e293b;flex-shrink:0">
+          <div style="flex:1;padding:9px 6px;text-align:center;font-size:10px;color:#f28d49;border-bottom:2px solid #f28d49;font-weight:600">Data Fields</div>
+          <div style="flex:1;padding:9px 6px;text-align:center;font-size:10px;color:#64748b">Widgets</div>
+          <div style="flex:1;padding:9px 6px;text-align:center;font-size:10px;color:#64748b">Templates</div>
+        </div>
+
+        <!-- Source indicator -->
+        <div style="padding:8px 10px;background:#0f172a;border-bottom:1px solid #1e293b;font-size:9px;color:#64748b">
+          From: <span style="color:#94a3b8">Q1 Academy Import</span>
+        </div>
+
+        <!-- Field list -->
+        <div style="flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:5px">
+          <div style="background:#1e293b;border-radius:6px;padding:8px 9px;cursor:grab">
+            <div style="color:#64748b;font-size:9px">KPI · number</div>
+            <div style="color:#e2e8f0;font-size:11px;font-weight:500">Total Enrollments</div>
+            <div style="color:#f28d49;font-size:9px;margin-top:2px">→ KPI Card</div>
+          </div>
+          <div style="background:#1e293b;border-radius:6px;padding:8px 9px;cursor:grab">
+            <div style="color:#64748b;font-size:9px">metric · percent</div>
+            <div style="color:#e2e8f0;font-size:11px;font-weight:500">Completion Rate</div>
+            <div style="color:#f28d49;font-size:9px;margin-top:2px">→ KPI Card</div>
+          </div>
+          <div style="background:#1e293b;border-radius:6px;padding:8px 9px;cursor:grab">
+            <div style="color:#64748b;font-size:9px">dimension + metric</div>
+            <div style="color:#e2e8f0;font-size:11px;font-weight:500">Course × Completions</div>
+            <div style="color:#f28d49;font-size:9px;margin-top:2px">→ Bar Chart</div>
+          </div>
+          <div style="background:#1e293b;border-radius:6px;padding:8px 9px;cursor:grab">
+            <div style="color:#64748b;font-size:9px">takeaway · text</div>
+            <div style="color:#e2e8f0;font-size:11px;font-weight:500">Key Insight</div>
+            <div style="color:#f28d49;font-size:9px;margin-top:2px">→ Narrative Block</div>
+          </div>
+          <div style="background:#1e293b;border-radius:6px;padding:8px 9px;cursor:grab;opacity:0.5">
+            <div style="color:#64748b;font-size:9px">ignored · text</div>
+            <div style="color:#64748b;font-size:11px">Internal Notes</div>
+            <div style="color:#475569;font-size:9px;margin-top:2px">Not widget-eligible</div>
+          </div>
+        </div>
+
+        <!-- Close tray -->
+        <div style="padding:8px;border-top:1px solid #1e293b;text-align:center">
+          <div style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:#f28d49;border-radius:50%;color:white;font-size:18px;cursor:pointer">×</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Key behaviours</h3>
+  <ul style="font-size:13px;color:#94a3b8;line-height:1.9;padding-left:18px">
+    <li><strong style="color:#e2e8f0">Drag from tray → canvas</strong> — widget pre-configured with field data, drops into nearest valid zone or between blocks</li>
+    <li><strong style="color:#e2e8f0">Drag within canvas</strong> — reorder within a block or move between blocks; drop-between-blocks zone creates a new section</li>
+    <li><strong style="color:#e2e8f0">Widget suggestion</strong> — driven by existing <code style="background:#1e293b;padding:1px 5px;border-radius:3px;font-size:11px">fieldRole</code> + <code style="background:#1e293b;padding:1px 5px;border-radius:3px;font-size:11px">fieldType</code> already in the registry. No new logic needed.</li>
+    <li><strong style="color:#e2e8f0">Ignored fields</strong> — shown greyed out, not draggable. Prevents confusion.</li>
+    <li><strong style="color:#e2e8f0">Widgets tab</strong> — blank widget types, identical to current quick-add palette</li>
+    <li><strong style="color:#e2e8f0">Templates tab</strong> — pre-built layouts (feeds Phase 2)</li>
+    <li><strong style="color:#e2e8f0">Tray source</strong> — shows which import batch the data fields come from; user can switch if multiple imports exist for the period</li>
+  </ul>
+</div>
+
+<div class="section">
+  <h3>What stays the same</h3>
+  <p style="font-size:13px;color:#94a3b8;line-height:1.7">Story blocks, zone keys, sort order, widget instances, approval/versioning, snapshot model — all unchanged. Drag-and-drop is a UI layer on top of the existing <code style="background:#1e293b;padding:1px 5px;border-radius:3px;font-size:11px">saveWidgetInstance</code> / <code style="background:#1e293b;padding:1px 5px;border-radius:3px;font-size:11px">deleteWidgetInstance</code> actions.</p>
+</div>

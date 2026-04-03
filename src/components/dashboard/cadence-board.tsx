@@ -66,7 +66,7 @@ export function CadenceBoard({ snapshot }: CadenceBoardProps) {
       <div className="grid gap-4 xl:grid-cols-3">
         {snapshot.cadenceGroups.map((group) => (
           <SurfaceCard
-            key={group.cadence}
+            key={`${group.cadence}-${group.periodLabel}`}
             eyebrow={group.periodLabel}
             title={group.cadence}
             contentClassName="space-y-5"

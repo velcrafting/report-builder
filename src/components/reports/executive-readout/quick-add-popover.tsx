@@ -33,7 +33,7 @@ export function QuickAddPopover({
       <div className="fixed bottom-24 right-6 z-40 w-[340px] rounded-[1.15rem] border border-white/15 bg-[var(--panel-strong)] px-4 py-4 shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-white/45">Quick add</p>
         <label className="mt-3 block space-y-1">
-          <span className="text-xs uppercase tracking-[0.16em] text-white/50">Section</span>
+          <span className="text-xs uppercase tracking-[0.16em] text-white/50">Department block</span>
           <select
             value={addBlockKey}
             onChange={(event) => onSetAddBlockKey(event.target.value)}

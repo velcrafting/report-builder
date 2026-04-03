@@ -15,7 +15,7 @@ function toRow(record: {
   id: string;
   outputVersionId: string;
   token: string;
-  createdByUserId: string;
+  createdByUserId: string | null;
   active: boolean;
   expiresAt: Date | null;
   createdAt: Date;

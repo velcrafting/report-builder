@@ -1,0 +1,88 @@
+<h2>Phase 3 — Google Drive Integration</h2>
+<p class="subtitle">Import · Live Sync · PDF Export</p>
+
+<div class="section">
+  <h3>Part A — Import from Drive</h3>
+  <p style="font-size:12px;color:#94a3b8;margin-bottom:10px">Google Drive becomes an alternative source in the existing import flow. Replaces the file upload step — everything downstream (period assignment, column review, field mapping) stays identical.</p>
+
+  <div class="mockup">
+    <div class="mockup-header">Import Workspace — Step 1: Choose source</div>
+    <div class="mockup-body" style="padding:16px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:#1e293b;border:2px solid #f28d49;border-radius:8px;padding:14px;text-align:center">
+          <div style="font-size:20px;margin-bottom:6px">📄</div>
+          <div style="color:#e2e8f0;font-size:12px;font-weight:600">Upload CSV</div>
+          <div style="color:#64748b;font-size:10px;margin-top:4px">Local file from your machine</div>
+        </div>
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:14px;text-align:center">
+          <div style="font-size:20px;margin-bottom:6px">🔗</div>
+          <div style="color:#e2e8f0;font-size:12px;font-weight:600">Connect Google Drive</div>
+          <div style="color:#64748b;font-size:10px;margin-top:4px">Pick a Sheet or Doc from your Drive</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;background:#0f172a;border-radius:8px;padding:12px">
+        <div style="color:#94a3b8;font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Your Drive — Recent files</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;align-items:center;gap:8px;background:#1e293b;border-radius:6px;padding:8px 10px">
+            <span style="font-size:14px">📊</span>
+            <div style="flex:1">
+              <div style="color:#e2e8f0;font-size:11px">Academy Q1 2026 Data.xlsx</div>
+              <div style="color:#64748b;font-size:9px">Modified 2 days ago</div>
+            </div>
+            <div style="color:#f28d49;font-size:10px;font-weight:600">Select →</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;background:#1e293b;border-radius:6px;padding:8px 10px">
+            <span style="font-size:14px">📊</span>
+            <div style="flex:1">
+              <div style="color:#e2e8f0;font-size:11px">Blog Performance March.sheets</div>
+              <div style="color:#64748b;font-size:9px">Modified 4 days ago</div>
+            </div>
+            <div style="color:#f28d49;font-size:10px;font-weight:600">Select →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Part B — Live Sync</h3>
+  <p style="font-size:12px;color:#94a3b8;margin-bottom:10px">When an import was sourced from Drive, the batch retains a reference to the source file. Editors can trigger a re-sync on any <strong style="color:#e2e8f0">draft</strong> import — never on approved outputs (those are frozen).</p>
+
+  <div style="background:#1e293b;border-radius:8px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+    <div>
+      <div style="color:#e2e8f0;font-size:12px;font-weight:600">Academy Q1 2026 Data.xlsx</div>
+      <div style="color:#64748b;font-size:10px;margin-top:2px">Last synced: 2 hours ago · 247 rows</div>
+    </div>
+    <div style="display:flex;gap:6px">
+      <div style="background:#0f172a;border:1px solid #334155;border-radius:6px;padding:6px 12px;font-size:10px;color:#94a3b8">View in Drive ↗</div>
+      <div style="background:#f28d49/15;border:1px solid #f28d49/40;border-radius:6px;padding:6px 12px;font-size:10px;color:#f28d49;font-weight:600">↻ Re-sync now</div>
+    </div>
+  </div>
+  <div style="margin-top:8px;background:#0f172a;border-radius:6px;padding:10px;font-size:10px;color:#64748b">
+    <span style="color:#f28d49">Note:</span> Re-sync replaces raw rows and re-runs column detection. Existing field mappings are preserved where column names match. New columns appear as unmapped candidates.
+  </div>
+</div>
+
+<div class="section">
+  <h3>Part C — PDF Export</h3>
+  <p style="font-size:12px;color:#94a3b8;margin-bottom:10px">Available on the shareable readout page of any approved output. Two destinations.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+    <div style="background:#1e293b;border-radius:8px;padding:12px;border:1px solid #334155">
+      <div style="font-size:16px;margin-bottom:6px">💾</div>
+      <div style="color:#e2e8f0;font-size:11px;font-weight:600">Download PDF</div>
+      <div style="color:#64748b;font-size:10px;margin-top:4px;line-height:1.5">Generates a PDF of the approved readout and downloads it to your local machine immediately.</div>
+    </div>
+    <div style="background:#1e293b;border-radius:8px;padding:12px;border:1px solid #334155">
+      <div style="font-size:16px;margin-bottom:6px">📤</div>
+      <div style="color:#e2e8f0;font-size:11px;font-weight:600">Save to Google Drive</div>
+      <div style="color:#64748b;font-size:10px;margin-top:4px;line-height:1.5">Generates the PDF and uploads directly to a chosen Drive folder. Requires Drive auth (same session as import, if connected).</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Auth model</h3>
+  <p style="font-size:12px;color:#94a3b8;line-height:1.7">Google OAuth scoped to <code style="background:#1e293b;padding:1px 5px;border-radius:3px">drive.readonly</code> for import/sync and <code style="background:#1e293b;padding:1px 5px;border-radius:3px">drive.file</code> for export. Token stored per user session — no org-wide service account needed at this stage.</p>
+</div>

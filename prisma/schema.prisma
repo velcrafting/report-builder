@@ -97,13 +97,13 @@ model User {
   isWhitelisted  Boolean            @default(false)
   createdAt      DateTime           @default(now())
   updatedAt      DateTime           @updatedAt
-  importBatches  ImportBatch[]
-  reportDrafts   ReportDraft[]
-  annotations    InsightAnnotation[]
-  approvedOutput OutputVersion[]    @relation("ApprovedOutputUser")
-  shareLinks     ShareLink[]
-  rollupsCreated RollupVersion[]    @relation("RollupCreator")
-  rollupsApproved RollupVersion[]   @relation("RollupApprover")
+  importBatches   ImportBatch[]
+  reportDrafts    ReportDraft[]
+  annotations     InsightAnnotation[]
+  approvedOutput  OutputVersion[]    @relation("ApprovedOutputUser")
+  shareLinks      ShareLink[]
+  rollupsCreated  RollupVersion[]    @relation("RollupCreator")
+  rollupsApproved RollupVersion[]    @relation("RollupApprover")
 }
 
 model Period {
@@ -124,18 +124,26 @@ model Period {
   rollupVersions     RollupVersion[]
 }
 
+model Department {
+  id        String   @id @default(cuid())
+  value     String   @unique
+  label     String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
 model ImportBatch {
   id               String          @id @default(cuid())
   section          String
   periodId         String
   kind             ImportKind
   filename         String
-  uploadedByUserId String
+  uploadedByUserId String?
   status           ImportStatus    @default(uploaded)
   uploadedAt       DateTime        @default(now())
   notes            String?
   period           Period          @relation(fields: [periodId], references: [id])
-  uploadedByUser   User            @relation(fields: [uploadedByUserId], references: [id])
+  uploadedByUser   User?           @relation(fields: [uploadedByUserId], references: [id], onDelete: SetNull)
   rawRows          RawImportRow[]
   normalizedRecords NormalizedRecord[]
 }
@@ -181,14 +189,14 @@ model ReportDraft {
   id              String          @id @default(cuid())
   section         String
   periodId        String
-  createdByUserId String
+  createdByUserId String?
   status          DraftState      @default(draft)
   title           String
   summary         String?
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
   period          Period          @relation(fields: [periodId], references: [id])
-  createdByUser   User            @relation(fields: [createdByUserId], references: [id])
+  createdByUser   User?           @relation(fields: [createdByUserId], references: [id], onDelete: SetNull)
   widgets         WidgetInstance[]
   outputVersions  OutputVersion[]
 }
@@ -218,11 +226,11 @@ model InsightAnnotation {
   classification  InsightClassification @default(none)
   priority        InsightPriority       @default(medium)
   promotedToRollup Boolean              @default(false)
-  createdByUserId String
+  createdByUserId String?
   createdAt       DateTime              @default(now())
   updatedAt       DateTime              @updatedAt
   period          Period                @relation(fields: [periodId], references: [id])
-  createdByUser   User                  @relation(fields: [createdByUserId], references: [id])
+  createdByUser   User?                 @relation(fields: [createdByUserId], references: [id], onDelete: SetNull)
 }
 
 model OutputVersion {
@@ -250,12 +258,12 @@ model ShareLink {
   id              String        @id @default(cuid())
   outputVersionId String
   token           String        @unique
-  createdByUserId String
+  createdByUserId String?
   active          Boolean       @default(true)
   createdAt       DateTime      @default(now())
   expiresAt       DateTime?
   outputVersion   OutputVersion @relation(fields: [outputVersionId], references: [id], onDelete: Cascade)
-  createdByUser   User          @relation(fields: [createdByUserId], references: [id])
+  createdByUser   User?         @relation(fields: [createdByUserId], references: [id], onDelete: SetNull)
 }
 
 model RollupVersion {
@@ -265,12 +273,12 @@ model RollupVersion {
   sourceOutputIdsJson String
   snapshotJson     String
   state            OutputState  @default(draft)
-  createdByUserId  String
+  createdByUserId  String?
   approvedByUserId String?
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt
   period           Period       @relation(fields: [periodId], references: [id])
-  createdByUser    User         @relation("RollupCreator", fields: [createdByUserId], references: [id])
+  createdByUser    User?        @relation("RollupCreator", fields: [createdByUserId], references: [id], onDelete: SetNull)
   approvedByUser   User?        @relation("RollupApprover", fields: [approvedByUserId], references: [id])
 }
 

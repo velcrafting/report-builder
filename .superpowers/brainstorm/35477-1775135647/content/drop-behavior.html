@@ -1,0 +1,60 @@
+<h2>How does a dragged item land on the canvas?</h2>
+<p class="subtitle">You drag "Total Enrollments → KPI Card" from the tray. What happens?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:14px;background:#0f172a;border-radius:8px;min-height:170px">
+      <div style="color:#94a3b8;font-size:9px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Academy Block</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px">
+        <div style="background:#1e293b;border-radius:6px;padding:8px;font-size:9px;color:#e2e8f0;text-align:center">KPI<br/>Card</div>
+        <div style="background:#1e293b;border-radius:6px;padding:8px;font-size:9px;color:#e2e8f0;text-align:center">Chart</div>
+        <div style="background:#334155;border:2px dashed #f28d49;border-radius:6px;padding:8px;font-size:9px;color:#f28d49;text-align:center">Drop<br/>here ↓</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+        <div style="background:#334155;border:2px dashed #475569;border-radius:6px;padding:8px;font-size:9px;color:#475569;text-align:center">Empty slot</div>
+        <div style="background:#334155;border:2px dashed #475569;border-radius:6px;padding:8px;font-size:9px;color:#475569;text-align:center">Empty slot</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Drop into a specific zone slot</h3>
+      <p>Hover over a section to reveal empty slots. Drop the widget into a specific slot. Layout stays structured and grid-aligned.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:14px;background:#0f172a;border-radius:8px;min-height:170px">
+      <div style="color:#94a3b8;font-size:9px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Academy Block</div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div style="background:#1e293b;border-radius:6px;padding:8px;font-size:9px;color:#e2e8f0">KPI Card — Enrollments</div>
+        <div style="background:#1e293b;border-radius:6px;padding:8px;font-size:9px;color:#e2e8f0">Bar Chart — Course × Completions</div>
+        <div style="background:#334155;border:2px dashed #f28d49;border-radius:6px;padding:8px;font-size:9px;color:#f28d49;text-align:center">↓ New widget appends here</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Append to active block</h3>
+      <p>Widget always appends to the bottom of whichever block is active/selected. No precise drop targeting — just click the field and it goes in. Reorder after.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:14px;background:#0f172a;border-radius:8px;min-height:170px">
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div style="background:#1e293b;border-radius:6px;padding:8px">
+          <div style="color:#94a3b8;font-size:9px;margin-bottom:4px">Academy Block</div>
+          <div style="background:#0f172a;border-radius:4px;padding:6px;font-size:9px;color:#e2e8f0">KPI Card — Enrollments</div>
+        </div>
+        <div style="background:#f28d49/10;border:2px dashed #f28d49;border-radius:6px;padding:8px;text-align:center;font-size:9px;color:#f28d49">Drop between blocks to insert here</div>
+        <div style="background:#1e293b;border-radius:6px;padding:8px">
+          <div style="color:#94a3b8;font-size:9px;margin-bottom:4px">Blog Block</div>
+          <div style="background:#0f172a;border-radius:4px;padding:6px;font-size:9px;color:#e2e8f0">Chart — Posts × Traffic</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Drag to any position</h3>
+      <p>Free drag anywhere — between blocks, within blocks, or to create a new block. Most flexible but most complex to build and use.</p>
+    </div>
+  </div>
+
+</div>

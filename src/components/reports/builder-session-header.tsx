@@ -96,6 +96,7 @@ export function BuilderSessionHeader({
               );
             })}
           </div>
+          {selectedTemplate && (
           <div className="rounded-[1.45rem] border border-white/10 bg-[linear-gradient(135deg,_rgba(255,255,255,0.08),_rgba(255,255,255,0.03))] px-5 py-5">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
               <div>
@@ -122,6 +123,7 @@ export function BuilderSessionHeader({
               ))}
             </div>
           </div>
+          )}
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">

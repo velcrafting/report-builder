@@ -25,7 +25,7 @@ export function OutputHistoryTable({ rows }: OutputHistoryTableProps) {
           <thead className="bg-white/5 text-[0.72rem] uppercase tracking-[0.18em] text-white/50">
             <tr>
               <th className="px-4 py-3 font-medium">Output</th>
-              <th className="px-4 py-3 font-medium">Section</th>
+              <th className="px-4 py-3 font-medium">Department</th>
               <th className="px-4 py-3 font-medium">State</th>
               <th className="px-4 py-3 font-medium">Updated</th>
               <th className="px-4 py-3 font-medium">Share</th>

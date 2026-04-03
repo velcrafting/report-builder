@@ -47,7 +47,7 @@ export default async function AdminReportsPage() {
       <PageIntro
         eyebrow="Reports"
         title="Report drafts"
-        description="Create and manage section report drafts. Each draft maps to a period and section, and can contain widget instances that feed the final executive artifact."
+        description="Create and manage department report drafts. Each draft maps to a period and department, and can contain widget instances that feed the final executive artifact."
       />
 
       <SurfaceCard eyebrow="New report" title="Start a new draft">

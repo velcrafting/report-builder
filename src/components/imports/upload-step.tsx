@@ -40,9 +40,9 @@ export function UploadStep({ onSubmit, loading }: UploadStepProps) {
       </label>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        {/* Section selector */}
+        {/* Department selector */}
         <label className="space-y-2 text-sm text-slate-300">
-          <span>Section</span>
+          <span>Department</span>
           <select
             name="section"
             defaultValue={SECTION_OPTIONS[0]?.value ?? "academy"}

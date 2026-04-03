@@ -1,0 +1,51 @@
+{"type":"server-started","port":60143,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:60143","screen_dir":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content","state_dir":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/state"}
+{"type":"screen-added","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/waiting.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/waiting.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/waiting.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/waiting.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/waiting.html"}
+{"type":"screen-added","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/sidebar-concept.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/sidebar-concept.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/sidebar-concept.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/sidebar-concept.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/sidebar-concept.html"}
+{"source":"user-event","type":"click","text":"Data Fields\n        Widgets\n        Templates\n      \n      \n        \n          KPI · number\n          Total Enrollments\n          → Suggested: KPI Card\n        \n        \n          metric · percent\n          Completion Rate\n          → Suggested: KPI Card\n        \n      \n      Switch to \"Widgets\" tab for blank types. \"Templates\" for pre-built layouts.\n    \n    \n      C — Tabbed sidebar\n      Three tabs: Data Fields (from import, with suggestions), Widget Types (blank), Templates (pre-built layouts). Best of all worlds.","choice":"c","id":null,"timestamp":1775136069117}
+{"type":"screen-added","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/flywheel-shape.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/flywheel-shape.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/flywheel-shape.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/flywheel-shape.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/flywheel-shape.html"}
+{"source":"user-event","type":"click","text":"📂 Data\n          🧩 Widgets\n          📐 Templates\n        \n        \n        \n          \n            KPI · number\n            Total Enrollments\n            → KPI Card\n          \n          \n            metric · percent\n            Completion Rate\n            → KPI Card\n          \n        \n      \n      \n        +\n      \n    \n    \n      B — Expanded tray above +\n      Click + and a tabbed tray slides up above it, anchored near the button. Tabs for Data, Widgets, Templates. Close on click-away.","choice":"b","id":null,"timestamp":1775136203924}
+{"type":"screen-added","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/waiting-2.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/waiting-2.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/waiting-2.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/waiting-2.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/waiting-2.html"}
+{"type":"screen-added","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/drop-behavior.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/drop-behavior.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/drop-behavior.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/drop-behavior.html"}
+{"source":"user-event","type":"click","text":"Academy Block\n          KPI Card — Enrollments\n        \n        Drop between blocks to insert here\n        \n          Blog Block\n          Chart — Posts × Traffic\n        \n      \n    \n    \n      C — Drag to any position\n      Free drag anywhere — between blocks, within blocks, or to create a new block. Most flexible but most complex to build and use.","choice":"c","id":null,"timestamp":1775136702755}
+{"type":"screen-added","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/waiting-3.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/waiting-3.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/waiting-3.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/waiting-3.html"}
+{"type":"screen-added","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/phase1-design.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/phase1-design.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/phase1-design.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/phase1-design.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/phase1-design.html"}
+{"type":"screen-added","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/phase2-design.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/phase2-design.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/phase2-design.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/phase2-design.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/phase2-design.html"}
+{"type":"screen-added","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/phase3-design.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/phase3-design.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/phase3-design.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/phase3-design.html"}
+{"type":"screen-added","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/phase4-design.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/phase4-design.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/phase4-design.html"}
+{"type":"screen-updated","file":"/Users/steven/Desktop/Coding/Ledger-Reporting/.superpowers/brainstorm/35477-1775135647/content/phase4-design.html"}
+{"type":"server-stopped","reason":"owner process exited"}

@@ -1,6 +1,7 @@
 import { type NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { isWhitelisted } from "@/config/whitelist";
+import { upsertUserByEmail } from "@/lib/db/users";
 
 // Extend next-auth types to include our custom fields
 declare module "next-auth" {
@@ -17,6 +18,7 @@ declare module "next-auth" {
   interface JWT {
     role: "admin" | "approver" | "editor" | "viewer";
     isWhitelisted: boolean;
+    dbUserId?: string;
   }
 }
 
@@ -68,26 +70,37 @@ export const authOptions: NextAuthOptions = {
     },
     async jwt({ token, user }) {
       if (user?.email) {
-        const whitelisted = isWhitelisted(user.email);
-        token.isWhitelisted = whitelisted;
-        // Default role: whitelisted users get editor, others get viewer
-        // Admins must be manually promoted via DB or env
         const adminEmails = (process.env.AUTH_ADMIN_EMAILS ?? "")
           .split(",")
           .map((e) => e.trim().toLowerCase());
-        if (adminEmails.includes(user.email.toLowerCase())) {
-          token.role = "admin";
-        } else if (whitelisted) {
-          token.role = "editor";
-        } else {
-          token.role = "viewer";
+        const isAdmin = adminEmails.includes(user.email.toLowerCase());
+        const whitelisted = isAdmin || isWhitelisted(user.email);
+        const role = isAdmin ? "admin" : whitelisted ? "editor" : "viewer";
+
+        // Upsert into the User table so FK constraints resolve correctly.
+        // token.dbUserId carries the real DB CUID for all subsequent requests.
+        try {
+          const dbUser = await upsertUserByEmail({
+            email: user.email,
+            name: user.name ?? undefined,
+            role,
+            isWhitelisted: whitelisted,
+          });
+          token.dbUserId = dbUser.id;
+        } catch {
+          // Non-fatal — fall back to OAuth sub; FK-constrained writes will still
+          // fail but auth itself remains unaffected.
         }
+
+        token.isWhitelisted = whitelisted;
+        token.role = role;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user && token) {
-        session.user.id = token.sub ?? "";
+        // Prefer the real DB User ID; fall back to OAuth sub if upsert failed.
+        session.user.id = (token.dbUserId as string | undefined) ?? token.sub ?? "";
         session.user.role =
           (token.role as "admin" | "approver" | "editor" | "viewer") ??
           "viewer";

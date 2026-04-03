@@ -1,0 +1,111 @@
+<h2>Phase 2 — Form Layout Presets</h2>
+<p class="subtitle">Three-layer preset system: view modes, section defaults, and template starters</p>
+
+<div class="section">
+  <h3>Layer 1 — View Modes</h3>
+  <p style="font-size:12px;color:#94a3b8;margin-bottom:10px">Same report, different visual display. Toggled from the builder session header. Persisted per output version.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+
+    <div style="background:#1e293b;border-radius:8px;padding:10px;border:1px solid #334155">
+      <div style="color:#f28d49;font-size:10px;font-weight:600;margin-bottom:6px">Compact / KPI-first</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px">
+        <div style="background:#0f172a;border-radius:4px;padding:5px;font-size:9px;color:#e2e8f0;text-align:center">KPI</div>
+        <div style="background:#0f172a;border-radius:4px;padding:5px;font-size:9px;color:#e2e8f0;text-align:center">KPI</div>
+      </div>
+      <div style="background:#0f172a;border-radius:4px;padding:5px;font-size:9px;color:#e2e8f0;text-align:center;margin-bottom:3px">KPI · KPI · KPI</div>
+      <div style="background:#0f172a;border-radius:4px;padding:4px;font-size:8px;color:#64748b;text-align:center">chart (small)</div>
+      <div style="color:#64748b;font-size:9px;margin-top:6px">Numbers lead. Charts secondary. Dense, scannable.</div>
+    </div>
+
+    <div style="background:#1e293b;border-radius:8px;padding:10px;border:2px solid #f28d49">
+      <div style="color:#f28d49;font-size:10px;font-weight:600;margin-bottom:6px">Chart-first</div>
+      <div style="background:#0f172a;border-radius:4px;padding:14px 5px;font-size:9px;color:#e2e8f0;text-align:center;margin-bottom:3px">📈 Large Chart</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px">
+        <div style="background:#0f172a;border-radius:4px;padding:5px;font-size:9px;color:#e2e8f0;text-align:center">KPI</div>
+        <div style="background:#0f172a;border-radius:4px;padding:5px;font-size:9px;color:#e2e8f0;text-align:center">KPI</div>
+      </div>
+      <div style="background:#0f172a;border-radius:4px;padding:4px;font-size:8px;color:#64748b;text-align:center">narrative</div>
+      <div style="color:#64748b;font-size:9px;margin-top:6px">Visual story first. Good for trend data.</div>
+    </div>
+
+    <div style="background:#1e293b;border-radius:8px;padding:10px;border:1px solid #334155">
+      <div style="color:#f28d49;font-size:10px;font-weight:600;margin-bottom:6px">Narrative-heavy</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px">
+        <div style="background:#0f172a;border-radius:4px;padding:5px;font-size:9px;color:#e2e8f0;text-align:center">KPI</div>
+        <div style="background:#0f172a;border-radius:4px;padding:5px;font-size:9px;color:#e2e8f0;text-align:center">KPI</div>
+      </div>
+      <div style="background:#0f172a;border-radius:4px;padding:10px 5px;font-size:9px;color:#e2e8f0;margin-bottom:3px">💬 Narrative insight text here...</div>
+      <div style="background:#0f172a;border-radius:4px;padding:6px 5px;font-size:9px;color:#e2e8f0">⚠️ Risk / Action items</div>
+      <div style="color:#64748b;font-size:9px;margin-top:6px">Story leads. Good for exec readouts.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>Layer 2 — Section Defaults</h3>
+  <p style="font-size:12px;color:#94a3b8;margin-bottom:10px">Each department section has a recommended default widget arrangement, based on its data shape. Applied automatically when a new report draft is created for that section.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+
+    <div style="background:#1e293b;border-radius:8px;padding:10px;border:1px solid #334155">
+      <div style="color:#e2e8f0;font-size:10px;font-weight:600;margin-bottom:2px">Academy</div>
+      <div style="color:#64748b;font-size:9px;margin-bottom:7px">Default: KPI-first (enrollment / completion numbers are the story)</div>
+      <div style="display:flex;gap:3px;flex-wrap:wrap">
+        <span style="background:#0f172a;border-radius:3px;padding:2px 6px;font-size:9px;color:#94a3b8">KPI ×3</span>
+        <span style="background:#0f172a;border-radius:3px;padding:2px 6px;font-size:9px;color:#94a3b8">Bar Chart</span>
+        <span style="background:#0f172a;border-radius:3px;padding:2px 6px;font-size:9px;color:#94a3b8">Narrative</span>
+      </div>
+    </div>
+
+    <div style="background:#1e293b;border-radius:8px;padding:10px;border:1px solid #334155">
+      <div style="color:#e2e8f0;font-size:10px;font-weight:600;margin-bottom:2px">Blog</div>
+      <div style="color:#64748b;font-size:9px;margin-bottom:7px">Default: Chart-first (traffic trends are the story)</div>
+      <div style="display:flex;gap:3px;flex-wrap:wrap">
+        <span style="background:#0f172a;border-radius:3px;padding:2px 6px;font-size:9px;color:#94a3b8">Line Chart</span>
+        <span style="background:#0f172a;border-radius:3px;padding:2px 6px;font-size:9px;color:#94a3b8">KPI ×2</span>
+        <span style="background:#0f172a;border-radius:3px;padding:2px 6px;font-size:9px;color:#94a3b8">Table</span>
+      </div>
+    </div>
+
+    <div style="background:#1e293b;border-radius:8px;padding:10px;border:1px solid #334155">
+      <div style="color:#e2e8f0;font-size:10px;font-weight:600;margin-bottom:2px">GEO / Brand OS</div>
+      <div style="color:#64748b;font-size:9px;margin-bottom:7px">Default: Narrative-heavy (qualitative insights matter more)</div>
+      <div style="display:flex;gap:3px;flex-wrap:wrap">
+        <span style="background:#0f172a;border-radius:3px;padding:2px 6px;font-size:9px;color:#94a3b8">Narrative ×2</span>
+        <span style="background:#0f172a;border-radius:3px;padding:2px 6px;font-size:9px;color:#94a3b8">Evidence</span>
+        <span style="background:#0f172a;border-radius:3px;padding:2px 6px;font-size:9px;color:#94a3b8">KPI ×1</span>
+      </div>
+    </div>
+
+    <div style="background:#1e293b;border-radius:8px;padding:10px;border:1px solid #334155">
+      <div style="color:#e2e8f0;font-size:10px;font-weight:600;margin-bottom:2px">Defensive Comms</div>
+      <div style="color:#64748b;font-size:9px;margin-bottom:7px">Default: Risk-led (blockers and actions are primary)</div>
+      <div style="display:flex;gap:3px;flex-wrap:wrap">
+        <span style="background:#0f172a;border-radius:3px;padding:2px 6px;font-size:9px;color:#94a3b8">Risk/Blocker ×2</span>
+        <span style="background:#0f172a;border-radius:3px;padding:2px 6px;font-size:9px;color:#94a3b8">Action</span>
+        <span style="background:#0f172a;border-radius:3px;padding:2px 6px;font-size:9px;color:#94a3b8">Narrative</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Layer 3 — Template Starters + Save-as-Template</h3>
+  <p style="font-size:12px;color:#94a3b8;margin-bottom:10px">Generic building block starters in the Templates tab of the flywheel tray. Any report can be saved as a template.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+    <div style="background:#1e293b;border-radius:8px;padding:10px;border:1px solid #334155">
+      <div style="color:#e2e8f0;font-size:10px;font-weight:600;margin-bottom:2px">Quarterly Pulse</div>
+      <div style="color:#64748b;font-size:9px;margin-bottom:7px">KPIs + trend chart + narrative + actions</div>
+      <div style="background:#0f172a;border-radius:4px;padding:5px;font-size:9px;color:#475569;text-align:center">5 widgets</div>
+    </div>
+    <div style="background:#1e293b;border-radius:8px;padding:10px;border:1px solid #334155">
+      <div style="color:#e2e8f0;font-size:10px;font-weight:600;margin-bottom:2px">Weekly Snapshot</div>
+      <div style="color:#64748b;font-size:9px;margin-bottom:7px">3 KPIs + 1 risk flag + 1 note</div>
+      <div style="background:#0f172a;border-radius:4px;padding:5px;font-size:9px;color:#475569;text-align:center">5 widgets</div>
+    </div>
+    <div style="background:#1e293b;border-radius:8px;padding:10px;border:2px dashed #334155">
+      <div style="color:#64748b;font-size:10px;font-weight:600;margin-bottom:2px">+ Save current as template</div>
+      <div style="color:#475569;font-size:9px">Any approved or draft report can be saved as a reusable starter</div>
+    </div>
+  </div>
+</div>

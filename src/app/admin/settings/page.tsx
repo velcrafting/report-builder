@@ -2,7 +2,7 @@ import Link from "next/link";
 import { requireRole } from "@/features/auth/session";
 import { listPeriods } from "@/lib/db/periods";
 import { listUsers } from "@/lib/db/users";
-import { REPORTING_SECTIONS } from "@/config/sections";
+import { listDepartments } from "@/lib/db/departments";
 import { AppShell } from "@/components/layout/app-shell";
 import { PageIntro } from "@/components/layout/page-intro";
 import { FieldRegistryTable } from "@/components/admin/field-registry-table";
@@ -19,9 +19,7 @@ export default async function SettingsPage({
   const session = await requireRole("admin");
   const { tab = "registry" } = await searchParams;
 
-  const [periods, users] = await Promise.all([listPeriods(), listUsers()]);
-
-  const sectionValues = REPORTING_SECTIONS.map((s) => s.value);
+  const [periods, users, departments] = await Promise.all([listPeriods(), listUsers(), listDepartments()]);
 
   const tabs = [
     { key: "registry", label: "Field Registry" },
@@ -60,8 +58,9 @@ export default async function SettingsPage({
           <section>
             <h2 className="mb-4 text-lg font-semibold text-white">Field Registry</h2>
             <FieldRegistryTable
-              sections={sectionValues}
-              initialSection={sectionValues[0]}
+              sections={departments.map((d) => d.value)}
+              sectionLabels={Object.fromEntries(departments.map((d) => [d.value, d.label]))}
+              initialSection={departments[0]?.value ?? ""}
             />
           </section>
         )}
@@ -79,6 +78,7 @@ export default async function SettingsPage({
             <UserTable
               initialUsers={users}
               currentUserId={session.user.id}
+              currentUserRole={session.user.role}
             />
           </section>
         )}

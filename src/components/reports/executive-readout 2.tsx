@@ -155,23 +155,6 @@ export function ExecutiveReadout({
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-[1.5rem] border border-white/10 bg-white/5 px-5 py-5">
-              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-white/40">
-                Output state
-              </p>
-              <p className="mt-3 text-xl font-semibold text-white">{snapshot.outputStateLabel}</p>
-              <p className="mt-1 text-sm text-slate-300">{snapshot.outputVersionLabel}</p>
-            </div>
-            <div className="rounded-[1.5rem] border border-white/10 bg-white/5 px-5 py-5">
-              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-white/40">
-                Story frame
-              </p>
-              <p className="mt-3 text-xl font-semibold text-white">Three-part reporting</p>
-              <p className="mt-1 text-sm text-slate-300">
-                Where we started, what we learned, and where we&apos;re going next.
-              </p>
-            </div>
-
             {snapshot.topMetrics.map((metric, index) =>
               hiddenIdSet.has(`metric-${index}`) ? null : (
                 <div
@@ -473,7 +456,7 @@ export function ExecutiveReadout({
             </div>
             <div className="mt-4 space-y-3">
               <label className="block space-y-1">
-                <span className="text-xs uppercase tracking-[0.16em] text-white/50">Section</span>
+                <span className="text-xs uppercase tracking-[0.16em] text-white/50">Department block</span>
                 <select
                   value={addBlockKey}
                   onChange={(event) => setAddBlockKey(event.target.value)}

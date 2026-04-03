@@ -26,7 +26,7 @@ const navGroups = [
   {
     label: "Readout",
     items: [
-      { href: "/reports/academy/2026-q1", label: "Section Report", icon: Shapes },
+      { href: "/reports/academy/2026-q1", label: "Department Report", icon: Shapes },
       { href: "/rollup/2026-q1", label: "Roll-up", icon: BarChart3 },
       { href: "/share/output/academy-q1-v3", label: "Read-only Share", icon: Link2 },
     ],

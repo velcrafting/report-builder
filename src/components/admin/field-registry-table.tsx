@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
+import { Plus, X } from "lucide-react";
 import type { FieldRole, FieldType } from "@prisma/client";
 import type { FieldRegistryEntryRow } from "@/lib/db/fieldRegistry";
 import {
@@ -8,9 +9,13 @@ import {
   updateRegistryEntry,
   deactivateEntry,
 } from "@/features/imports/registry-actions";
+import {
+  createDepartmentAction,
+} from "@/features/settings/department-actions";
 
 type Props = {
   sections: string[];
+  sectionLabels?: Record<string, string>;
   initialSection?: string;
 };
 
@@ -26,13 +31,20 @@ const FIELD_ROLE_OPTIONS: FieldRole[] = [
   "ignored",
 ];
 
-export function FieldRegistryTable({ sections, initialSection }: Props) {
+export function FieldRegistryTable({ sections, sectionLabels = {}, initialSection }: Props) {
+  const [allSections, setAllSections] = useState(sections);
   const [activeSection, setActiveSection] = useState(
     initialSection ?? sections[0] ?? ""
   );
   const [entries, setEntries] = useState<FieldRegistryEntryRow[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [isPending, startTransition] = useTransition();
+
+  // Add department state
+  const [showAddDept, setShowAddDept] = useState(false);
+  const [newDeptName, setNewDeptName] = useState("");
+  const [addDeptError, setAddDeptError] = useState<string | null>(null);
+  const [allLabels, setAllLabels] = useState<Record<string, string>>(sectionLabels);
 
   function loadSection(section: string) {
     setActiveSection(section);
@@ -44,9 +56,29 @@ export function FieldRegistryTable({ sections, initialSection }: Props) {
     });
   }
 
-  // Load initial section on first render
-  if (!loaded && !isPending && activeSection) {
-    loadSection(activeSection);
+  // Load initial section after mount
+  useEffect(() => {
+    if (activeSection) loadSection(activeSection);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function handleAddDepartment(e: React.FormEvent) {
+    e.preventDefault();
+    setAddDeptError(null);
+    const name = newDeptName.trim();
+    if (!name) { setAddDeptError("Name is required."); return; }
+    startTransition(async () => {
+      const result = await createDepartmentAction(name);
+      if (result.error) { setAddDeptError(result.error); return; }
+      if (result.department) {
+        const { value, label } = result.department;
+        setAllSections((prev) => [...prev, value]);
+        setAllLabels((prev) => ({ ...prev, [value]: label }));
+        setNewDeptName("");
+        setShowAddDept(false);
+        loadSection(value);
+      }
+    });
   }
 
   function handleDisplayLabelChange(id: string, displayLabel: string) {
@@ -87,9 +119,9 @@ export function FieldRegistryTable({ sections, initialSection }: Props) {
 
   return (
     <div className="space-y-4">
-      {/* Section Selector */}
-      <div className="flex flex-wrap gap-2">
-        {sections.map((section) => (
+      {/* Department Selector + Add */}
+      <div className="flex flex-wrap items-center gap-2">
+        {allSections.map((section) => (
           <button
             key={section}
             onClick={() => loadSection(section)}
@@ -100,9 +132,47 @@ export function FieldRegistryTable({ sections, initialSection }: Props) {
                 : "border border-white/10 bg-white/5 text-white hover:bg-white/10"
             } disabled:opacity-50`}
           >
-            {section}
+            {allLabels[section] ?? section}
           </button>
         ))}
+
+        {/* Add department button */}
+        {!showAddDept ? (
+          <button
+            type="button"
+            onClick={() => { setShowAddDept(true); setAddDeptError(null); }}
+            className="flex items-center gap-1.5 rounded-full border border-dashed border-white/20 bg-transparent px-3 py-1.5 text-sm text-white/50 transition hover:border-white/40 hover:text-white"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            Add department
+          </button>
+        ) : (
+          <form onSubmit={handleAddDepartment} className="flex items-center gap-2">
+            <input
+              autoFocus
+              type="text"
+              value={newDeptName}
+              onChange={(e) => setNewDeptName(e.target.value)}
+              placeholder="Department name"
+              className="rounded-full border border-[var(--accent)]/45 bg-slate-950/65 px-3 py-1.5 text-sm text-white outline-none placeholder-white/30 focus:border-[var(--accent)]"
+            />
+            <button
+              type="submit"
+              disabled={isPending}
+              className="rounded-full bg-[var(--accent)] px-3 py-1.5 text-xs font-semibold text-slate-950 transition hover:bg-[var(--accent-strong)] disabled:opacity-50"
+            >
+              Add
+            </button>
+            <button
+              type="button"
+              onClick={() => { setShowAddDept(false); setNewDeptName(""); setAddDeptError(null); }}
+              className="rounded-full border border-white/10 bg-white/5 p-1.5 text-white/50 transition hover:text-white"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+            {addDeptError && <p className="text-xs text-red-400">{addDeptError}</p>}
+          </form>
+        )}
       </div>
 
       {/* Loading state */}

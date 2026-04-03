@@ -13,9 +13,9 @@ export const SECTION_OPTIONS = REPORTING_SECTIONS.map((section) => ({
 
 export const CADENCE_OPTIONS = [
   { value: "weekly", label: "Weekly" },
+  { value: "bi-weekly", label: "Bi-weekly" },
   { value: "monthly", label: "Monthly" },
   { value: "quarterly", label: "Quarterly" },
-  { value: "custom", label: "Custom" },
 ] as const;
 
 export function getSectionLabel(sectionValue: string) {

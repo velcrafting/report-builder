@@ -99,7 +99,7 @@ export function AddWidgetModal({
           ) : null}
 
           <label className="block space-y-1">
-            <span className="text-xs uppercase tracking-[0.16em] text-white/50">Section</span>
+            <span className="text-xs uppercase tracking-[0.16em] text-white/50">Department block</span>
             <select
               value={addBlockKey}
               onChange={(event) => onSetAddBlockKey(event.target.value)}

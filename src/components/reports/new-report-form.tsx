@@ -5,6 +5,16 @@ import { useRouter } from "next/navigation";
 import { REPORTING_SECTIONS } from "@/config/sections";
 import { createReportDraft } from "@/features/reports/actions";
 import type { PeriodSummary } from "@/lib/db/periods";
+import { PeriodPicker } from "@/components/ui/period-picker";
+
+const CADENCE_OPTIONS = [
+  { value: "weekly", label: "Weekly" },
+  { value: "bi-weekly", label: "Bi-weekly" },
+  { value: "monthly", label: "Monthly" },
+  { value: "quarterly", label: "Quarterly" },
+] as const;
+
+type Cadence = (typeof CADENCE_OPTIONS)[number]["value"];
 
 type NewReportFormProps = {
   periods: PeriodSummary[];
@@ -16,6 +26,7 @@ export function NewReportForm({ periods }: NewReportFormProps) {
   const [section, setSection] = useState<string>(REPORTING_SECTIONS[0].value);
   const [periodId, setPeriodId] = useState(periods[0]?.id ?? "");
   const [title, setTitle] = useState("");
+  const [cadence, setCadence] = useState<Cadence>("monthly");
   const [error, setError] = useState<string | null>(null);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -35,10 +46,10 @@ export function NewReportForm({ periods }: NewReportFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <label className="block space-y-1">
           <span className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white/45">
-            Section
+            Department
           </span>
           <select
             value={section}
@@ -56,24 +67,33 @@ export function NewReportForm({ periods }: NewReportFormProps) {
 
         <label className="block space-y-1">
           <span className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white/45">
-            Period
+            Cadence
           </span>
           <select
-            value={periodId}
-            onChange={(e) => setPeriodId(e.target.value)}
+            value={cadence}
+            onChange={(e) => setCadence(e.target.value as Cadence)}
             className="w-full rounded-[0.95rem] border border-white/15 bg-slate-950/65 px-3 py-2 text-sm text-white outline-none focus:border-[var(--accent)]/45"
             disabled={isPending}
           >
-            {periods.length === 0 && (
-              <option value="">No periods available</option>
-            )}
-            {periods.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.label}
+            {CADENCE_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
               </option>
             ))}
           </select>
         </label>
+
+        <div className="block space-y-1">
+          <span className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white/45">
+            Period
+          </span>
+          <PeriodPicker
+            periods={periods}
+            value={periodId}
+            onChange={setPeriodId}
+            disabled={isPending}
+          />
+        </div>
 
         <label className="block space-y-1">
           <span className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white/45">

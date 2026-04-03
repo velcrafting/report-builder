@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Status:** Not started
+**Status:** Completed
 
 **Goal:** Upgrade the report builder into a drag-and-drop canvas with a tabbed flywheel tray (Data Fields / Widgets / Templates) that replaces the existing QuickAddPopover.
 
@@ -582,7 +582,7 @@ git commit -m "feat: add TemplatesTab listing report creation presets"
 **Files:**
 - Create: `src/components/reports/flywheel-tray/flywheel-tray.tsx`
 
-- [ ] **Step 1: Create the file**
+- [x] ✅ **Step 1: Create the file**
 
 ```typescript
 // src/components/reports/flywheel-tray/flywheel-tray.tsx
@@ -685,7 +685,7 @@ export function FlywheelTray({
 }
 ```
 
-- [ ] **Step 2: Verify TypeScript compiles**
+- [x] ✅ **Step 2: Verify TypeScript compiles**
 
 ```bash
 cd /Users/steven/Desktop/Coding/Ledger-Reporting && npx tsc --noEmit 2>&1 | grep "flywheel"
@@ -693,7 +693,7 @@ cd /Users/steven/Desktop/Coding/Ledger-Reporting && npx tsc --noEmit 2>&1 | grep
 
 Expected: no output.
 
-- [ ] **Step 3: Commit**
+- [x] ✅ **Step 3: Commit**
 
 ```bash
 git add src/components/reports/flywheel-tray/
@@ -712,7 +712,7 @@ This replaces the existing `BuilderCanvas` with a version that:
 2. Wraps each card in `useSortable`
 3. Adds between-zone drop targets (visible as dashed dividers on drag)
 
-- [ ] **Step 1: Rewrite `builder-canvas.tsx`**
+- [x] ✅ **Step 1: Rewrite `builder-canvas.tsx`**
 
 ```typescript
 // src/components/reports/builder-canvas.tsx
@@ -916,7 +916,7 @@ export function BuilderCanvas({
 }
 ```
 
-- [ ] **Step 2: Verify TypeScript compiles**
+- [x] ✅ **Step 2: Verify TypeScript compiles**
 
 ```bash
 cd /Users/steven/Desktop/Coding/Ledger-Reporting && npx tsc --noEmit 2>&1 | tail -10
@@ -924,7 +924,7 @@ cd /Users/steven/Desktop/Coding/Ledger-Reporting && npx tsc --noEmit 2>&1 | tail
 
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] ✅ **Step 3: Commit**
 
 ```bash
 git add src/components/reports/builder-canvas.tsx
@@ -945,7 +945,7 @@ This is the most involved task. The workspace needs to:
 4. Render `FlywheelTray` instead of (or alongside) `QuickAddPopover`
 5. On drop: update `zones` state locally, then call `bulkUpdateWidgetPositions`
 
-- [ ] **Step 1: Add imports at the top of `report-builder-workspace.tsx`**
+- [x] ✅ **Step 1: Add imports at the top of `report-builder-workspace.tsx`**
 
 Add these imports (keep all existing imports):
 
@@ -967,7 +967,7 @@ import { bulkUpdateWidgetPositions, type WidgetPositionUpdate } from "@/features
 import type { FieldSuggestion } from "@/features/imports/field-suggestions-action";
 ```
 
-- [ ] **Step 2: Add state and effects inside `ReportBuilderWorkspace` (after existing state declarations)**
+- [x] ✅ **Step 2: Add state and effects inside `ReportBuilderWorkspace` (after existing state declarations)**
 
 ```typescript
 const [fieldSuggestions, setFieldSuggestions] = useState<FieldSuggestion[]>([]);
@@ -986,7 +986,7 @@ useEffect(() => {
 }, [draftSection]);
 ```
 
-- [ ] **Step 3: Add DnD event handlers inside `ReportBuilderWorkspace` (after the useEffect)**
+- [x] ✅ **Step 3: Add DnD event handlers inside `ReportBuilderWorkspace` (after the useEffect)**
 
 ```typescript
 function handleDragStart(event: DragStartEvent) {
@@ -1067,7 +1067,7 @@ function handleDragEnd(event: DragEndEvent) {
 }
 ```
 
-- [ ] **Step 4: Find the JSX return block and wrap the `BuilderCanvas` in `DndContext`**
+- [x] ✅ **Step 4: Find the JSX return block and wrap the `BuilderCanvas` in `DndContext`**
 
 In the `return (...)` block, find where `<BuilderCanvas .../>` is rendered and wrap it:
 
@@ -1089,7 +1089,7 @@ In the `return (...)` block, find where `<BuilderCanvas .../>` is rendered and w
 </DndContext>
 ```
 
-- [ ] **Step 5: Add `FlywheelTray` to the return block**
+- [x] ✅ **Step 5: Add `FlywheelTray` to the return block**
 
 In the return block, add `FlywheelTray` as a sibling to the canvas (it renders fixed-positioned, so placement in JSX tree doesn't matter visually):
 
@@ -1113,7 +1113,7 @@ In the return block, add `FlywheelTray` as a sibling to the canvas (it renders f
 
 > **Note:** The exact wiring of `onAddBlankWidget` and `onApplyPreset` depends on which handlers already exist in `ReportBuilderWorkspace`. Look for `handleAddCard` / `onAddCard` / `createReportFromPreset` calls in the existing workspace code and route through the same path. Do not duplicate the add-widget logic.
 
-- [ ] **Step 6: Verify TypeScript compiles**
+- [x] ✅ **Step 6: Verify TypeScript compiles**
 
 ```bash
 cd /Users/steven/Desktop/Coding/Ledger-Reporting && npx tsc --noEmit 2>&1 | tail -15
@@ -1136,7 +1136,7 @@ cd /Users/steven/Desktop/Coding/Ledger-Reporting && npm run dev
 7. Drag a card's grip handle up/down within a zone — cards reorder
 8. Check DB: open Prisma Studio (`npx prisma studio`) and verify `sortOrder` updated on `WidgetInstance`
 
-- [ ] **Step 8: Commit**
+- [x] ✅ **Step 8: Commit**
 
 ```bash
 git add src/components/reports/report-builder-workspace.tsx
@@ -1152,7 +1152,7 @@ git commit -m "feat: wire DnD context and FlywheelTray into ReportBuilderWorkspa
 
 When a `FieldSuggestion` item is dragged from the tray and dropped on a zone, create a new `WidgetInstance`.
 
-- [ ] **Step 1: Update `handleDragEnd` to handle field drops**
+- [x] ✅ **Step 1: Update `handleDragEnd` to handle field drops**
 
 Inside the existing `handleDragEnd`, after the early return for `!over || !draftId`, add:
 
@@ -1220,7 +1220,7 @@ if (dragData?.type === "field" || dragData?.type === "widget-kind") {
 
 Make sure `saveWidgetInstance` is already imported — it comes from `@/features/reports/actions` and should already be in scope in the workspace.
 
-- [ ] **Step 2: Verify TypeScript compiles**
+- [x] ✅ **Step 2: Verify TypeScript compiles**
 
 ```bash
 cd /Users/steven/Desktop/Coding/Ledger-Reporting && npx tsc --noEmit 2>&1 | tail -5
@@ -1228,7 +1228,7 @@ cd /Users/steven/Desktop/Coding/Ledger-Reporting && npx tsc --noEmit 2>&1 | tail
 
 Expected: no errors.
 
-- [ ] **Step 3: Verify in browser**
+- [x] ✅ **Step 3: Verify in browser**
 
 1. Open `/admin/reports/[draftId]`
 2. Open the flywheel tray → Data Fields tab
@@ -1236,7 +1236,7 @@ Expected: no errors.
 4. Refresh the page — the widget should persist (confirming DB write)
 5. Drag from Widgets tab → same result with a blank widget
 
-- [ ] **Step 4: Commit**
+- [x] ✅ **Step 4: Commit**
 
 ```bash
 git add src/components/reports/report-builder-workspace.tsx
@@ -1251,17 +1251,17 @@ git commit -m "feat: handle field and widget-kind drag drops onto canvas zones"
 - Modify: `src/components/reports/report-builder-workspace.tsx`
 - Modify: `src/components/reports/executive-readout/quick-add-popover.tsx` (optional cleanup)
 
-- [ ] **Step 1: Remove the QuickAddPopover import and usage from `report-builder-workspace.tsx`**
+- [x] ✅ **Step 1: Remove the QuickAddPopover import and usage from `report-builder-workspace.tsx`**
 
 Find all references to `QuickAddPopover`, `setAddBlockKey`, and the quick-add open state in `report-builder-workspace.tsx`. Remove them — the flywheel tray replaces this functionality.
 
-- [ ] **Step 2: Verify TypeScript compiles with no unused-variable errors**
+- [x] ✅ **Step 2: Verify TypeScript compiles with no unused-variable errors**
 
 ```bash
 cd /Users/steven/Desktop/Coding/Ledger-Reporting && npx tsc --noEmit 2>&1 | tail -5
 ```
 
-- [ ] **Step 3: Check the app builds**
+- [x] ✅ **Step 3: Check the app builds**
 
 ```bash
 cd /Users/steven/Desktop/Coding/Ledger-Reporting && npm run build 2>&1 | tail -20
@@ -1269,7 +1269,7 @@ cd /Users/steven/Desktop/Coding/Ledger-Reporting && npm run build 2>&1 | tail -2
 
 Expected: no errors, no "unused import" warnings that would block the build.
 
-- [ ] **Step 4: Commit**
+- [x] ✅ **Step 4: Commit**
 
 ```bash
 git add src/components/reports/report-builder-workspace.tsx

@@ -1,6 +1,9 @@
-import { LayoutTemplate, MessageSquareQuote, MoveRight, SlidersHorizontal, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { BookOpen, LayoutTemplate, MessageSquareQuote, MoveRight, SlidersHorizontal, Sparkles } from "lucide-react";
 import { SurfaceCard } from "@/components/ui/surface-card";
-import type { ReportBuilderSnapshot } from "@/features/reports/types";
+import type { ReportBuilderSnapshot, ReportSnapshot } from "@/features/reports/types";
+
+type StoryBlock = ReportSnapshot["storyBlocks"][number];
 
 type BuilderInspectorProps = {
   snapshot: ReportBuilderSnapshot;
@@ -9,6 +12,8 @@ type BuilderInspectorProps = {
   onUpdateSelectedCard: (
     patch: Partial<ReportBuilderSnapshot["zones"][number]["cards"][number]>,
   ) => void;
+  storyBlocks?: StoryBlock[];
+  onEditStoryBlock?: (blockKey: string, patch: Partial<Pick<StoryBlock, "title" | "intro" | "lead">>) => void;
 };
 
 export function BuilderInspector({
@@ -16,7 +21,12 @@ export function BuilderInspector({
   selectedCard,
   selectedZoneTitle,
   onUpdateSelectedCard,
+  storyBlocks = [],
+  onEditStoryBlock,
 }: BuilderInspectorProps) {
+  const [selectedBlockKey, setSelectedBlockKey] = useState<string>(storyBlocks[0]?.key ?? "");
+  const selectedBlock = storyBlocks.find((b) => b.key === selectedBlockKey) ?? storyBlocks[0];
+
   return (
     <SurfaceCard
       eyebrow="Inspector"
@@ -160,6 +170,59 @@ export function BuilderInspector({
             </div>
           )}
         </div>
+
+        {storyBlocks.length > 0 && onEditStoryBlock ? (
+          <div className="rounded-[1.35rem] border border-white/10 bg-slate-950/45 px-4 py-4">
+            <div className="flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-white/40">
+              <BookOpen className="h-3.5 w-3.5 text-[var(--accent)]" />
+              Story frames
+            </div>
+            {storyBlocks.length > 1 ? (
+              <select
+                value={selectedBlockKey}
+                onChange={(event) => setSelectedBlockKey(event.target.value)}
+                className="mt-3 w-full rounded-[0.9rem] border border-white/15 bg-slate-950/65 px-3 py-2 text-sm text-white outline-none focus:border-[var(--accent)]/45"
+              >
+                {storyBlocks.map((block) => (
+                  <option key={block.key} value={block.key}>
+                    {block.title || block.key}
+                  </option>
+                ))}
+              </select>
+            ) : null}
+            {selectedBlock ? (
+              <div className="mt-4 space-y-3">
+                <label className="block space-y-1">
+                  <span className="text-xs uppercase tracking-[0.16em] text-white/50">Frame title</span>
+                  <input
+                    type="text"
+                    value={selectedBlock.title}
+                    onChange={(event) => onEditStoryBlock(selectedBlock.key, { title: event.target.value })}
+                    className="w-full rounded-[0.9rem] border border-white/15 bg-slate-950/65 px-3 py-2 text-sm text-white outline-none focus:border-[var(--accent)]/45"
+                  />
+                </label>
+                <label className="block space-y-1">
+                  <span className="text-xs uppercase tracking-[0.16em] text-white/50">Intro</span>
+                  <textarea
+                    rows={2}
+                    value={selectedBlock.intro}
+                    onChange={(event) => onEditStoryBlock(selectedBlock.key, { intro: event.target.value })}
+                    className="w-full rounded-[0.9rem] border border-white/15 bg-slate-950/65 px-3 py-2 text-sm text-white outline-none focus:border-[var(--accent)]/45"
+                  />
+                </label>
+                <label className="block space-y-1">
+                  <span className="text-xs uppercase tracking-[0.16em] text-white/50">Lead</span>
+                  <textarea
+                    rows={3}
+                    value={selectedBlock.lead}
+                    onChange={(event) => onEditStoryBlock(selectedBlock.key, { lead: event.target.value })}
+                    className="w-full rounded-[0.9rem] border border-white/15 bg-slate-950/65 px-3 py-2 text-sm text-white outline-none focus:border-[var(--accent)]/45"
+                  />
+                </label>
+              </div>
+            ) : null}
+          </div>
+        ) : null}
 
         <div className="rounded-[1.35rem] border border-[var(--accent)]/20 bg-[var(--accent)]/10 px-4 py-4">
           <div className="flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-orange-50">
