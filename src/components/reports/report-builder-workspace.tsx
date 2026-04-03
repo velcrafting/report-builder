@@ -499,14 +499,78 @@ export function ReportBuilderWorkspace({ snapshot, initialDraft, initialWidgets 
     setActiveDragId(null);
 
     const { active, over } = event;
-    if (!over || !draftId) return;
+    if (!over) return;
 
     const activeId = String(active.id);
     const overId = String(over.id);
 
-    // Skip if this is a tray item drop (handled in Task 11)
     const dragData = active.data.current;
-    if (dragData?.type === "field" || dragData?.type === "widget-kind") return;
+
+    // ── Tray item drop (field or widget-kind) ─────────────────────────────────
+    if (dragData?.type === "field" || dragData?.type === "widget-kind") {
+      const widgetKind = dragData.widgetKind as string;
+      const displayLabel = (dragData.displayLabel as string) ?? widgetKind;
+
+      // Determine target zone from overId
+      let targetZoneKey = zones[0]?.key ?? "header-summary";
+      if (overId.startsWith("zone-")) {
+        targetZoneKey = overId.replace("zone-", "");
+      } else if (overId.startsWith("between-")) {
+        const parts = overId.split("-and-");
+        const afterKey = parts[1];
+        if (afterKey && afterKey !== "end") {
+          targetZoneKey = afterKey;
+        } else {
+          targetZoneKey = zones[zones.length - 1]?.key ?? targetZoneKey;
+        }
+      }
+
+      const targetZone = zones.find((z) => z.key === targetZoneKey);
+      const sortOrder = targetZone ? targetZone.cards.length : 0;
+
+      // Optimistic temp card
+      const tempId = `temp-${Date.now()}`;
+      const newCard = {
+        id: tempId,
+        widgetType: widgetKind,
+        title: displayLabel,
+        source: (dragData.internalKey as string) ?? "",
+        size: "medium" as const,
+        includeInRollup: false,
+        status: "draft-only" as const,
+      };
+
+      setZones((prev) =>
+        prev.map((z) =>
+          z.key === targetZoneKey ? { ...z, cards: [...z.cards, newCard] } : z
+        )
+      );
+
+      if (draftId) {
+        saveWidgetInstance(draftId, {
+          widgetType: widgetKind,
+          zoneKey: targetZoneKey,
+          size: "medium",
+          configJson: JSON.stringify({ sourceField: (dragData.internalKey as string) ?? null }),
+          sortOrder,
+          includeInRollup: false,
+        })
+          .then((saved) => {
+            setZones((prev) =>
+              prev.map((z) => ({
+                ...z,
+                cards: z.cards.map((c) => (c.id === tempId ? { ...c, id: saved.id } : c)),
+              }))
+            );
+          })
+          .catch(console.error);
+      }
+
+      return;
+    }
+
+    // Card-to-card / zone reorder — requires a real draftId
+    if (!draftId) return;
 
     // Find source zone (zone containing the dragged card)
     const sourceZone = zones.find((z) => z.cards.some((c) => c.id === activeId));
@@ -1000,10 +1064,56 @@ export function ReportBuilderWorkspace({ snapshot, initialDraft, initialWidgets 
         section={draftSection}
         fields={fieldSuggestions}
         onAddBlankWidget={(kind) => {
-          // TODO: wire in Task 11 — no suitable zone-targeted add-widget handler exists yet
+          const targetZoneKey = zones[0]?.key ?? "header-summary";
+          const targetZone = zones.find((z) => z.key === targetZoneKey);
+          const sortOrder = targetZone ? targetZone.cards.length : 0;
+          const tempId = `temp-${Date.now()}`;
+
+          setZones((prev) =>
+            prev.map((z) =>
+              z.key === targetZoneKey
+                ? {
+                    ...z,
+                    cards: [
+                      ...z.cards,
+                      {
+                        id: tempId,
+                        widgetType: kind,
+                        title: kind,
+                        source: "",
+                        size: "medium" as const,
+                        includeInRollup: false,
+                        status: "draft-only" as const,
+                      },
+                    ],
+                  }
+                : z
+            )
+          );
+
+          if (draftId) {
+            saveWidgetInstance(draftId, {
+              widgetType: kind,
+              zoneKey: targetZoneKey,
+              size: "medium",
+              configJson: "{}",
+              sortOrder,
+              includeInRollup: false,
+            })
+              .then((saved) => {
+                setZones((prev) =>
+                  prev.map((z) => ({
+                    ...z,
+                    cards: z.cards.map((c) => (c.id === tempId ? { ...c, id: saved.id } : c)),
+                  }))
+                );
+              })
+              .catch(console.error);
+          }
         }}
-        onApplyPreset={(presetId) => {
-          // TODO: wire in Task 11 — no suitable apply-preset handler exists yet
+        onApplyPreset={(_presetId) => {
+          // TODO: requires a server action to bulk-create WidgetInstances from preset.blockPlan
+          // Deferring to post-Task-12 cleanup
         }}
       />
 
