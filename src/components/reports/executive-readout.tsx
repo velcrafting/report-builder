@@ -6,11 +6,9 @@ import {
   CheckCircle2,
   CircleAlert,
   MinusCircle,
-  Plus,
   Sparkles,
 } from "lucide-react";
 import { AddWidgetModal } from "@/components/reports/executive-readout/add-widget-modal";
-import { QuickAddPopover } from "@/components/reports/executive-readout/quick-add-popover";
 import { StoryBlocksSection } from "@/components/reports/executive-readout/story-blocks-section";
 import { WidgetControlsModal } from "@/components/reports/executive-readout/widget-controls-modal";
 import { SurfaceCard } from "@/components/ui/surface-card";
@@ -108,15 +106,10 @@ export function ExecutiveReadout({
   const [controlsCardId, setControlsCardId] = useState<string | null>(null);
   const [editingCalloutIndex, setEditingCalloutIndex] = useState<number | null>(null);
   const [addingWidget, setAddingWidget] = useState(false);
-  const [quickAddOpen, setQuickAddOpen] = useState(false);
   const [addBlockKey, setAddBlockKey] = useState(snapshot.storyBlocks[0]?.key ?? "");
   const [newWidgetType, setNewWidgetType] = useState<NewWidgetType>("text_insight");
   const [widgetSearch, setWidgetSearch] = useState("");
   const hiddenIdSet = new Set(hiddenCardIds);
-  const quickAddKinds =
-    favoriteWidgetKinds.length > 0
-      ? favoriteWidgetKinds
-      : (["text_insight", "comparison", "kpi_stat", "time_series"] as WidgetKind[]);
 
   const controlsCard = useMemo(
     () =>
@@ -157,23 +150,6 @@ export function ExecutiveReadout({
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-[1.5rem] border border-white/10 bg-white/5 px-5 py-5">
-              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-white/40">
-                Output state
-              </p>
-              <p className="mt-3 text-xl font-semibold text-white">{snapshot.outputStateLabel}</p>
-              <p className="mt-1 text-sm text-slate-300">{snapshot.outputVersionLabel}</p>
-            </div>
-            <div className="rounded-[1.5rem] border border-white/10 bg-white/5 px-5 py-5">
-              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-white/40">
-                Story frame
-              </p>
-              <p className="mt-3 text-xl font-semibold text-white">Three-part reporting</p>
-              <p className="mt-1 text-sm text-slate-300">
-                Where we started, what we learned, and where we&apos;re going next.
-              </p>
-            </div>
-
             {snapshot.topMetrics.map((metric, index) =>
               hiddenIdSet.has(`metric-${index}`) ? null : (
                 <div
@@ -305,39 +281,6 @@ export function ExecutiveReadout({
         </div>
       </SurfaceCard>
 
-      {editable ? (
-        <>
-          {onAddCard ? (
-            <QuickAddPopover
-              open={quickAddOpen}
-              storyBlocks={snapshot.storyBlocks}
-              addBlockKey={addBlockKey}
-              quickAddKinds={quickAddKinds}
-              onSetAddBlockKey={setAddBlockKey}
-              onAddCard={onAddCard}
-              onAddWidgetBundle={onAddWidgetBundle}
-              onMoreOptions={() => {
-                setNewWidgetType("text_insight");
-                setAddingWidget(true);
-                setQuickAddOpen(false);
-              }}
-              onClose={() => setQuickAddOpen(false)}
-            />
-          ) : null}
-          <button
-            type="button"
-            onClick={() => {
-              setAddBlockKey(snapshot.storyBlocks[0]?.key ?? "");
-              setQuickAddOpen((current) => !current);
-            }}
-            className="fixed bottom-6 right-6 z-40 inline-flex h-14 w-14 items-center justify-center rounded-full border border-[var(--accent)]/55 bg-[var(--accent)]/90 text-slate-950 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition hover:scale-[1.02]"
-            aria-label="Add widget"
-            title="Add widget"
-          >
-            <Plus className="h-6 w-6" />
-          </button>
-        </>
-      ) : null}
 
       {controlsCard && editable && onEditCard ? (
         <WidgetControlsModal
